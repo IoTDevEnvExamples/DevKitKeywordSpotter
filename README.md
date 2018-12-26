@@ -1,7 +1,9 @@
-# Keyword Spotting on AZ3166 with no cloud connection
+# Keyword Spotting on IoT DevKit with no cloud connection
 
 In this tutorial, you learn how to do some simple voice recognition locally on your IoT DevKit without using a cloud service.
 It records your voice, detects what you said from a fixed list of 30 keywords, and shows the result on the DevKit screen.
+
+You can watch this [Channel9 video](https://aka.ms/iotshow/110) to have a deep understanding of what it does.
 
 ## About IoT DevKit
 
@@ -24,15 +26,17 @@ Finish the [Getting Started Guide](./devkit-get-started.md) to:
 
 ## Build and upload the device code
 
-1. Open the command palette and select **IoT Workbench: Device**, then select **Device Upload**.
+1. In VS Code, select the serial port IoT DevKit connect.
+
+1. Open the command palette and select **IoT Device Workbench:Upload Device Code**.
 
 	![IoT Workbench: Device -> Upload](images/iot-workbench-device-upload.png)
 
-2. VS Code then starts verifying and uploading the code to your DevKit.
+1. VS Code then starts verifying and uploading the code to your DevKit.
 
 	![IoT Workbench: Device -> Uploaded](images/iot-workbench-device-uploaded.png)
 
-3. The IoT DevKit reboots and starts running the code.
+1. The IoT DevKit reboots and starts running the code.
 
 
 ## Test the project
