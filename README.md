@@ -61,5 +61,5 @@ You will see the current gain level printed on the screen like this:
 ## Try other models
 
 The neural network included in the classifier source code was compiled to run on the ARM Cortex-M4 chip using the [Microsoft ELL Compiler](https://microsoft.github.io/ELL/).  You can train different keywords using PyTorch
-and compile them using ELL by following this [Audio Training tutorial](https://microsoft.github.io/ELL/tutorials/Getting-started-with-audio-keyword-classification-on-the-Raspberry-Pi/).
+and compile them using ELL by following this [Audio Training tutorial](https://microsoft.github.io/ELL/tutorials/Getting-started-with-audio-keyword-spotting-on-the-Raspberry-Pi/).
 
