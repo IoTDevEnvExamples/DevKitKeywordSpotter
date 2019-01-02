@@ -25,6 +25,23 @@ Finish the [Getting Started Guide](./devkit-get-started.md) to:
 * Make sure [Azure IoT Device Workbench](https://marketplace.visualstudio.com/items?itemName=vsciot-vscode.vscode-iot-workbench) is installed.
 * Connect IoT DevKit to your PC.
 
+### Open Azure IoT Device Workbench Examples
+
+Use `F1` or `Ctrl+Shift+P` (macOS: `Cmd+Shift+P`) to open the command palette, type **Azure IoT Device Workbench**, and then select **Open Examples...**.
+
+![IoT Device Workbench: Examples](images/iot-workbench-examples-cmd.png)
+
+Select **IoT DevKit**.
+
+![IoT Device Workbench: Examples -> Select board](images/iot-workbench-examples-board.png)
+
+Then the **IoT Device Workbench Example** window is shown up.
+
+![IoT Device Workbench, Examples window](images/iot-workbench-examples.png)
+
+Find **Keyword Spotting on IoT DevKit** and click **Open Sample** button. A new VS Code window with a project folder in it opens.
+
+![IoT Device Workbench, Keyword Spotting on IoT DevKit](images/iot-workbench-example.png)
 
 ## Build and upload the device code
 
