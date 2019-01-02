@@ -9,7 +9,7 @@ You can watch the following video to have a deep understanding of what it does.
 
 ## About IoT DevKit
 
-The [MXChip IoT DevKit](https://aka.ms/iot-devkit) (a.k.a. IoT DevKit) is an all-in-one Arduino compatible board with rich peripherals and sensors. You can develop for it using [Azure IoT Workbench ](https://aka.ms/azure-iot-workbench). And it comes with a growing [projects catalog](https://aka.ms/devkit/project-catalog) to guide you prototype Internet of Things (IoT) solutions that take advantage of Microsoft Azure services.
+The [MXChip IoT DevKit](https://aka.ms/iot-devkit) (a.k.a. IoT DevKit) is an all-in-one Arduino compatible board with rich peripherals and sensors. You can develop for it using [Azure IoT Device Workbench ](https://aka.ms/azure-iot-workbench). And it comes with a growing [projects catalog](https://aka.ms/devkit/project-catalog) to guide you prototype Internet of Things (IoT) solutions that take advantage of Microsoft Azure services.
 
 ## What you need
 
@@ -22,7 +22,7 @@ Finish the [Getting Started Guide](./devkit-get-started.md) to:
 ### Start VS Code
 
 * Start Visual Studio Code.
-* Make sure [Azure IoT Workbench](https://marketplace.visualstudio.com/items?itemName=vsciot-vscode.vscode-iot-workbench) is installed.
+* Make sure [Azure IoT Device Workbench](https://marketplace.visualstudio.com/items?itemName=vsciot-vscode.vscode-iot-workbench) is installed.
 * Connect IoT DevKit to your PC.
 
 
@@ -30,7 +30,7 @@ Finish the [Getting Started Guide](./devkit-get-started.md) to:
 
 1. In VS Code, select the serial port IoT DevKit connect.
 
-1. Open the command palette and select **IoT Device Workbench:Upload Device Code**.
+1. Open the command palette and select **Azure IoT Device Workbench: Upload Device Code**.
 
 	![IoT Workbench: Device -> Upload](images/iot-workbench-device-upload.png)
 
