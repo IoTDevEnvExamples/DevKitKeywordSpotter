@@ -3,7 +3,9 @@
 In this tutorial, you learn how to do some simple voice recognition locally on your IoT DevKit without using a cloud service.
 It records your voice, detects what you said from a fixed list of 30 keywords, and shows the result on the DevKit screen.
 
-You can watch this [Channel9 video](https://aka.ms/iotshow/110) to have a deep understanding of what it does.
+You can watch the following video to have a deep understanding of what it does.
+
+[!Channel 9 video](https://img.youtube.com/vi/QodiBGhpcb4/0.jpg)](https://aka.ms/iotshow/110)
 
 ## About IoT DevKit
 
