@@ -5,7 +5,7 @@ It records your voice, detects what you said from a fixed list of 30 keywords, a
 
 You can watch the following video to have a deep understanding of what it does.
 
-[!Channel 9 video](https://img.youtube.com/vi/QodiBGhpcb4/0.jpg)](https://aka.ms/iotshow/110)
+[![Channel 9 video](https://img.youtube.com/vi/QodiBGhpcb4/0.jpg)](https://aka.ms/iotshow/110)
 
 ## About IoT DevKit
 
