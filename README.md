@@ -1,4 +1,4 @@
-# Keyword Spotting on IoT DevKit with no cloud connection
+# Keyword Spotting on IoT DevKit with ELL
 
 In this tutorial, you learn how to do some simple voice recognition locally on your IoT DevKit without using a cloud service.
 It records your voice, detects what you said from a fixed list of 30 keywords, and shows the result on the DevKit screen.
