@@ -13,152 +13,14 @@
 #define MODEL_WRAPPER_DEFINED
 #include "classifier.h"
 
-// Arduino build can't seem to handle lots of source files so they are all included here to make one big file.
-// Even then you will probably get build errors every second build, in which case you need to delete the temporary build folder.
-#ifndef BUTTONS_H
-#define BUTTONS_H
-
-class ButtonManager
-{
-  private:
-    int lastButtonAState;
-    int lastButtonBState;
-
-  public:
-    enum ButtonStates
-    {
-      None = 0,
-      ButtonAPressed = 1,
-      ButtonBPressed = 2
-    };
-
-    void init()
-    {
-      // initialize the button pin as a input
-      pinMode(USER_BUTTON_A, INPUT);
-      lastButtonAState = digitalRead(USER_BUTTON_A);
-
-      // initialize the button B pin as a input
-      pinMode(USER_BUTTON_B, INPUT);
-      lastButtonBState = digitalRead(USER_BUTTON_B);
-    }
-
-    int read()
-    {          
-      int result = ButtonStates::None;
-      int buttonAState = digitalRead(USER_BUTTON_A);
-      int buttonBState = digitalRead(USER_BUTTON_B);
-      
-      if (buttonAState == LOW && lastButtonAState == HIGH)
-      {
-        result |= ButtonStates::ButtonAPressed;
-      }
-      if (buttonBState == LOW && lastButtonBState == HIGH)
-      {
-        result |= ButtonStates::ButtonBPressed;
-      }
-      lastButtonAState = buttonAState;
-      lastButtonBState = buttonBState;
-      return result;
-    }
-};
-
-#endif
-
-
-#ifndef SIMPLE_TIMER_H
-#define SIMPLE_TIMER_H
-
-class SimpleTimer {
-public:
-    SimpleTimer() 
-    {
-        started_ = false;
-    }
-    void start() 
-    {
-        started_ = true;
-        start_ = now();
-    }
-    void stop() 
-    {
-        started_ = false;
-        end_ = now();
-    }
-    double seconds() 
-    {
-        auto diff = static_cast<double>(end() - start_);
-        return  diff / 1000.0;
-    }
-    double milliseconds() 
-    {
-        return static_cast<double>(end() - start_);
-    }
-    bool started() 
-    {
-        return started_;
-    }
-    static void init() {
-        SystemTickCounterInit();
-    }
-private:
-    uint64_t now() {
-        return SystemTickCounterRead();
-    }
-    uint64_t end() {
-        if (started_) {
-            // not stopped yet, so return "elapsed time so far".
-            end_ = SystemTickCounterRead();
-        }
-        return end_;
-    }
-    uint64_t start_;
-    uint64_t end_;
-    bool started_;
-};
-#endif
+// If you get compile errors you may need to delete the temporary build folder.
+#include "buttons.h"
+#include "simpletimer.h"
 
 #include "SystemTickCounter.h"
-#ifndef INSTRUCTION_COUNTER_H
-#define INSTRUCTION_COUNTER_H
+#include "instructioncounter.h"
 
-#include "core_cm4.h"
-
-class InstructionCounter
-{
-private:
-    uint32_t _count;
-public:
-    const uint32_t DWT_CYCLE_COUNTER_ENABLE_BIT = (1UL << 0);
-
-    InstructionCounter() 
-    {
-    }
-    void Enable()
-    {
-        DWT->CTRL |= DWT_CYCLE_COUNTER_ENABLE_BIT;
-    }
-    void Disable()
-    {
-        DWT->CTRL &= ~DWT_CYCLE_COUNTER_ENABLE_BIT;
-    }
-    void Start()
-    {
-        DWT->CYCCNT = 0; // reset the count
-    }
-    void Stop()
-    {
-        _count = DWT->CYCCNT;
-    }
-    uint32_t GetCount() 
-    {
-        return _count;
-    }
-};
-
-#endif
-
-
+// Global variables
 AudioClass& Audio = AudioClass::getInstance();
 
 enum AppState 
@@ -171,12 +33,8 @@ enum AppState
 static AppState appstate;
 
 // These numbers need to match the compiled ELL models.
-const int SAMPLE_RATE = 16000;
 const int SAMPLE_BIT_DEPTH = 16;
-const int FEATURIZER_INPUT_SIZE = 512;
-const int FRAME_RATE = 33; // assumes a "shift" of 512 and 512/16000 = 0.032ms per frame.
-const int FEATURIZER_OUTPUT_SIZE = 80;
-const int CLASSIFIER_OUTPUT_SIZE = 31;
+#include "model_properties.h"
 const float THRESHOLD = 0.9;
 
 static int scaled_input_buffer_pos = 0;
@@ -193,7 +51,7 @@ static float classifier_output_buffer[CLASSIFIER_OUTPUT_SIZE]; // 31 classes
 static int raw_audio_count = 0;
 static char raw_audio_buffer[AUDIO_CHUNK_SIZE];
 static int prediction_count = 0;
-static int last_prediction = 0;
+static uint last_prediction = 0;
 static int last_confidence = 0; // as a percentage between 0 and 100.
 
 static uint8_t maxGain = 0;
@@ -206,6 +64,7 @@ static uint hint_delay = 5; // seconds
 extern "C" {
     extern int vad_signal;
 }
+
 ButtonManager buttons;
 InstructionCounter cycleCounter;
 
@@ -217,39 +76,7 @@ int next(int pos){
   return pos;
 }
 
-static const char* const categories[] = {
-    "background_noise",
-    "bed",
-    "bird",
-    "cat",
-    "dog",
-    "down",
-    "eight",
-    "five",
-    "four",
-    "go",
-    "happy",
-    "house",
-    "left",
-    "marvin",
-    "nine",
-    "no",
-    "off",
-    "on",
-    "one",
-    "right",
-    "seven",
-    "sheila",
-    "six",
-    "stop",
-    "three",
-    "tree",
-    "two",
-    "up",
-    "wow",
-    "yes",
-    "zero"
-};
+#include "categories.h"
 
 uint max_category = 0;
 int last_vad = 0;
@@ -257,6 +84,8 @@ float min_level = 100;
 float max_level = 0;
 RGB_LED rgbLed;
 
+// This helper function uses the RGB led to give an indication of audio levels (brightness)
+// and voice activity (red)
 void show_signals(int vad, float level)
 {
   if (level < min_level){
@@ -299,6 +128,8 @@ static uint reset_delay = 1; // s\econds
 static bool reset_waiting = false;
 static SimpleTimer reset_timer;
 
+// During no voice activity it is helpful to reset the model every so often to stop
+// the GRU from accumulating too much useless noise.
 void delayed_reset(int vad)
 {
   if (vad == 0)
@@ -324,7 +155,7 @@ void delayed_reset(int vad)
   }
 }
 
-
+// If no words are being recognized, display a hint to the user on which words they can speak.
 void display_hint(bool reset)
 {
   if (reset) {
@@ -346,6 +177,8 @@ void display_hint(bool reset)
   }
 }
 
+// Show on the screen what the current gain levels are.  User can change the min and max
+// gain using the "A" and "B" buttons.
 void display_gain()
 {
   char buffer[20];
@@ -364,6 +197,7 @@ void display_gain()
   }
 }
 
+// Set the microphone gain on the NAU88C10 audio codec chip.
 void set_gain()
 {
   if (maxGain < minGain) {
@@ -385,6 +219,7 @@ void set_gain()
   model_Reset();
 }
 
+// Increment the microphone min or max gain on the NAU88C10 audio codec chip.
 void increase_gain(bool inc_min, bool inc_max)
 {
   if (inc_min) {
@@ -404,6 +239,7 @@ void increase_gain(bool inc_min, bool inc_max)
   display_gain();
 }
 
+// show  an error message on the LCD screen
 void show_error(const char* msg)
 {
   Screen.clean();
@@ -411,6 +247,8 @@ void show_error(const char* msg)
   appstate = APPSTATE_Error;
 }
 
+// Check the button state and for an "A" button press increment the minimum gain
+// and for the "B" button increment the maximum gain.
 void check_buttons()
 {
   auto state = buttons.read();
@@ -424,6 +262,9 @@ void check_buttons()
   }
 }
 
+// Process a input buffer through the featurizer and classifier to see if we can
+// spot one of the keywords in categories.h.  A bit of smoothing is done on the 
+// predictions so the screen doesn't update too often.  
 bool get_prediction(float* featurizer_input_buffer)
 {
   // looks like <chrono> doesn't work, rats...
@@ -448,10 +289,10 @@ bool get_prediction(float* featurizer_input_buffer)
   show_signals(vad, level);
 
   float max = -1;
-  int argmax = 0;
+  uint argmax = 0;
   
   // argmax over predictions.
-  for (int j = 0; j < CLASSIFIER_OUTPUT_SIZE; j++)
+  for (uint j = 0; j < CLASSIFIER_OUTPUT_SIZE; j++)
   {
       float v = classifier_output_buffer[j];
       if (v > max) {
@@ -480,6 +321,9 @@ bool get_prediction(float* featurizer_input_buffer)
           Serial.printf("Prediction %d is %s (%.2f) on level %.2f, vad=%d, in %d ms\r\n", prediction_count++, categories[argmax], (float)percent/100, level, vad, (int)elapsed);
           Screen.clean();
           Screen.print(0, categories[argmax]);
+          char line[120];
+          sprintf(line, "%d %%", percent);
+          Screen.print(1, line);
           if (argmax == hint_index)
           {
             hint_index++;
@@ -488,8 +332,8 @@ bool get_prediction(float* featurizer_input_buffer)
               hint_index = 1;
             } 
           }
-          Screen.print(2, "next word:");
-          Screen.print(3, categories[hint_index]);
+          sprintf(line, "%d ms", (int)elapsed);
+          Screen.print(2, line);
           got_prediction = true;
         }
         
@@ -507,6 +351,9 @@ bool get_prediction(float* featurizer_input_buffer)
   return got_prediction;
 }
 
+// This function is called when a new recorded audio input buffer is ready to be processed.
+// This is an interrupt callback so we want to make this as quick as possible, we don't return
+// the classifier here, instead we store the data in a circular set of 10 input buffers.
 void audio_callback()
 {
   // this is called when Audio class has a buffer full of audio, the buffer is size AUDIO_CHUNK_SIZE (512)  
@@ -549,14 +396,8 @@ void audio_callback()
   }
 }
 
-void stop_recording()
-{
-  Audio.stop();
-  Screen.clean();
-  Serial.println("stop recording");
-  Screen.print(0, "stopped.");
-}
-
+// Tell the audio class to start recording audio with the required sample rate and bit depth that
+// matches what our model was trained on (usually 16kHz, 16 bit)
 void start_recording()
 {
   appstate = APPSTATE_Recording;
@@ -571,6 +412,10 @@ void start_recording()
   Audio.startRecord(audio_callback);
 }
 
+// This is our normal Arduino setup function, here we setup various things and we check that
+// the featurizer and classifier we linked with actually match the global variables defined
+// in the header model_properties.h.  We also time how long the featurizer and classifier take
+// in actual instruction counts.
 void setup(void)
 {
   SimpleTimer::init();
@@ -579,9 +424,6 @@ void setup(void)
   max_category = sizeof(categories) / sizeof(char*);
   pinMode(LED_BUILTIN, OUTPUT);
   Serial.begin(115200);
-    
-  cycleCounter.Enable();
-
   Serial.println("ELL Audio Demo!");
   Serial.printf("Recognizing %d keywords\n", max_category);
   
@@ -616,24 +458,35 @@ void setup(void)
   {
     // do a warm up.  
     SimpleTimer timer;
-    timer.start();
 
     ::memset(featurizer_input_buffers[0], 0, FEATURIZER_INPUT_SIZE);
 
-    cycleCounter.Start();
-
-    // give it a whirl !!
-    mfcc_Filter(nullptr, featurizer_input_buffers[0], featurizer_output_buffer);
-
-    // classifier
-    model_Predict(nullptr, featurizer_output_buffer, classifier_output_buffer);
-
-    cycleCounter.Stop();
-    uint32_t count = cycleCounter.GetCount();
-    Serial.printf("Filter+Predict Cycle Count=%d\n", count);
-
+    timer.start();
+    for (int i = 0; i < 10; i++)
+    {
+      // give it a whirl !!
+      mfcc_Filter(nullptr, featurizer_input_buffers[0], featurizer_output_buffer);
+    }
     timer.stop();
-    Serial.printf("Setup predict took %f ms\r\n", timer.milliseconds());
+    Serial.printf("Setup featurizer took %f ms\r\n", timer.milliseconds() / 10);
+
+    timer.start();    
+    cycleCounter.Enable();
+    cycleCounter.Start();
+    // featurizer + classifier
+    mfcc_Filter(nullptr, featurizer_input_buffers[0], featurizer_output_buffer);
+    cycleCounter.Stop();
+    uint32_t fc = cycleCounter.GetCount();
+    cycleCounter.Start();
+    model_Predict(nullptr, featurizer_output_buffer, classifier_output_buffer);
+    cycleCounter.Stop();
+    uint32_t cc = cycleCounter.GetCount();
+    cycleCounter.Disable();
+    timer.stop();
+
+    Serial.printf("Setup featurizer+ took %f ms\r\n", timer.milliseconds());
+    Serial.printf("Featurizer instruction cycles = %d\r\n", fc);
+    Serial.printf("Classifier instruction cycles = %d\r\n", cc);
 
     // check audio gain and print the result.
     uint32_t id = Audio.readRegister(nau88c10_CHIPID_ADDR);
@@ -643,12 +496,15 @@ void setup(void)
       Serial.printf("Found audio device: 0x%x\r\n", id);
     }
 
-    // a default gain level of 4 seems to work pretty well.
-    maxGain = 3;
-    set_gain();
-
     start_recording();
     
+    delay(100);
+    
+    // a default gain level of 6 seems to work pretty well.
+    minGain = 6;
+    maxGain = 6;
+    set_gain();
+
     Screen.clean();
     
     Screen.print(0, "Listening...");
@@ -657,7 +513,8 @@ void setup(void)
   }
 }
 
-
+// This is our normal Arduino loop function where we wait for available input buffers
+// and process those through the keyword spotter, show some hints and check the buttons.
 void loop(void)
 {
   if (appstate != APPSTATE_Error)

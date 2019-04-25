@@ -40,58 +40,41 @@ mfcc_Filter:
 	.pad	#16
 	sub	sp, #16
 	str	r2, [sp, #8]            @ 4-byte Spill
-	mov	r5, r1
-	mov.w	r2, #2048
-	ldr	r1, .LCPI0_16
+	ldr	r2, .LCPI0_15
 .LPC0_0:
-	add	r1, pc
-	str	r0, [r1]
-	ldr	r6, .LCPI0_17
+	add	r2, pc
+	str	r0, [r2]
+	mov.w	r2, #2048
+	ldr	r5, .LCPI0_16
 .LPC0_1:
-	add	r6, pc
-	mov	r0, r6
-	mov	r1, r6
-	bl	memmove
-	mov	r0, r6
-	mov	r1, r5
-	mov.w	r2, #2048
-	bl	memcpy
-	ldr	r5, .LCPI0_18
-	mov	r1, r6
-	mov.w	r2, #2048
-.LPC0_2:
 	add	r5, pc
 	mov	r0, r5
 	bl	memcpy
-	ldr	r2, .LCPI0_19
-	ldr	r1, .LCPI0_20
+	ldr	r2, .LCPI0_17
+	ldr	r1, .LCPI0_18
 	movs	r0, #0
-.LPC0_3:
+.LPC0_2:
 	add	r2, pc
-.LPC0_4:
+.LPC0_3:
 	add	r1, pc
-	b	.LBB0_6
+	b	.LBB0_5
 	.p2align	2
 @ %bb.1:
-.LCPI0_16:
+.LCPI0_15:
 	.long	mfcc_context-(.LPC0_0+4)
 	.p2align	2
 @ %bb.2:
-.LCPI0_17:
-	.long	g_0-(.LPC0_1+4)
+.LCPI0_16:
+	.long	g_1-(.LPC0_1+4)
 	.p2align	2
 @ %bb.3:
-.LCPI0_18:
-	.long	g_1-(.LPC0_2+4)
+.LCPI0_17:
+	.long	c_0-(.LPC0_2+4)
 	.p2align	2
 @ %bb.4:
-.LCPI0_19:
-	.long	c_0-(.LPC0_3+4)
-	.p2align	2
-@ %bb.5:
-.LCPI0_20:
-	.long	g_2-(.LPC0_4+4)
-.LBB0_6:                                @ %loop.body.i9
+.LCPI0_18:
+	.long	g_2-(.LPC0_3+4)
+.LBB0_5:                                @ %loop.body.i14
                                         @ =>This Inner Loop Header: Depth=1
 	adds	r3, r5, r0
 	adds	r7, r2, r0
@@ -162,13 +145,13 @@ mfcc_Filter:
 	vldr	s0, [r7, #60]
 	vmul.f32	s0, s2, s0
 	vstr	s0, [r6, #60]
-	bne.w	.LBB0_6
-@ %bb.7:                                @ %_Node__BinaryOperationNode_float__in_512_512_out_512_Node_1148.exit
+	bne.w	.LBB0_5
+@ %bb.6:                                @ %_Node__BinaryOperationNode_float__in_512_512_out_512_Node_1077.exit
 	add.w	r0, r1, #60
 	movs	r1, #0
 	add.w	r11, sp, #2064
 	movs	r2, #0
-.LBB0_8:                                @ %loop.body.i6
+.LBB0_7:                                @ %loop.body.i9
                                         @ =>This Inner Loop Header: Depth=1
 	ldr	r3, [r0, #-60]
 	ldr	r7, [r0, #-56]
@@ -207,12 +190,12 @@ mfcc_Filter:
 	ldr	r7, [r0]
 	add.w	r0, r0, #64
 	strd	r7, r1, [r3, #120]
-	bne	.LBB0_8
-@ %bb.9:                                @ %loop.after.i
+	bne	.LBB0_7
+@ %bb.8:                                @ %loop.after.i
 	movs	r1, #0
 	movs	r2, #60
 	add	r4, sp, #16
-.LBB0_10:                               @ %loop.body.i.i
+.LBB0_9:                                @ %loop.body.i.i
                                         @ =>This Inner Loop Header: Depth=1
 	add.w	r3, r11, r2
 	add.w	r7, r11, r1, lsl #1
@@ -244,10 +227,10 @@ mfcc_Filter:
 	strd	r10, r12, [r6, #12]
 	strd	r8, r7, [r6, #20]
 	str	r0, [r6, #28]
-	bne	.LBB0_10
-@ %bb.11:                               @ %loop.init1.i.i
+	bne	.LBB0_9
+@ %bb.10:                               @ %loop.init1.i.i
 	movs	r1, #0
-.LBB0_12:                               @ %loop.body3.i.i
+.LBB0_11:                               @ %loop.body3.i.i
                                         @ =>This Inner Loop Header: Depth=1
 	adds	r3, r4, r1
 	ldr.w	lr, [r4, r1]
@@ -277,8 +260,8 @@ mfcc_Filter:
 	str.w	r6, [r2, #2092]
 	stm.w	r0, {r5, r12, lr}
 	str.w	r3, [r2, #2108]
-	bne	.LBB0_12
-@ %bb.13:                               @ %loop.after5.i.i
+	bne	.LBB0_11
+@ %bb.12:                               @ %loop.after5.i.i
 	add	r6, sp, #16
 	mov	r0, r11
 	mov	r1, r6
@@ -286,17 +269,12 @@ mfcc_Filter:
 	add.w	r0, r11, #2048
 	mov	r1, r6
 	bl	FFTC_float_256
-	ldr	r1, .LCPI0_21
+	ldr	r1, .LCPI0_19
 	movs	r0, #0
-.LPC0_5:
+.LPC0_4:
 	add	r1, pc
 	mov	r12, r1
-	b	.LBB0_15
-	.p2align	2
-@ %bb.14:
-.LCPI0_21:
-	.long	twiddles_256-(.LPC0_5+4)
-.LBB0_15:                               @ %loop.body8.i.i
+.LBB0_13:                               @ %loop.body8.i.i
                                         @ =>This Inner Loop Header: Depth=1
 	add.w	r2, r11, r0
 	mov	r1, r12
@@ -383,15 +361,15 @@ mfcc_Filter:
 	vstr	s4, [r2, #28]
 	vstr	s2, [r7]
 	vstr	s0, [r1]
-	bne.w	.LBB0_15
-@ %bb.16:                               @ %loop.body3.i7.preheader
-	ldr	r0, .LCPI0_22
+	bne.w	.LBB0_13
+@ %bb.14:                               @ %loop.body3.i11.preheader
+	ldr	r0, .LCPI0_20
 	movs	r2, #0
-.LPC0_6:
+.LPC0_5:
 	add	r0, pc
-	mov	lr, r0
+	mov	r12, r0
 	add.w	r1, r0, #28
-.LBB0_17:                               @ %loop.body3.i7
+.LBB0_15:                               @ %loop.body3.i11
                                         @ =>This Inner Loop Header: Depth=1
 	add.w	r3, r11, r2
 	adds	r2, #64
@@ -445,259 +423,251 @@ mfcc_Filter:
 	vsqrt.f32	s0, s2
 	vstr	s0, [r1]
 	add.w	r1, r1, #32
-	bne	.LBB0_17
-@ %bb.18:                               @ %_Node__FFTNode_float__in_512_out_256.exit
-	ldr	r0, .LCPI0_23
-	vldr	s0, .LCPI0_24
+	bne	.LBB0_15
+@ %bb.16:                               @ %_Node__FFTNode_float__in_512_out_256.exit
+	ldr	r0, .LCPI0_21
+	vldr	s0, .LCPI0_22
 	movs	r1, #0
-	vmov.f32	s2, #5.000000e-01
-	vmov.f32	s4, #1.500000e+00
-	vmov.f32	s6, #2.500000e+00
-	vmov.f32	s8, #-5.000000e-01
-.LPC0_7:
+	vmov.f32	s2, #1.000000e+00
+	vmov.f32	s4, #2.000000e+00
+.LPC0_6:
 	add	r0, pc
 	mov	r8, r0
-	ldr	r0, .LCPI0_25
-.LPC0_8:
+	ldr	r0, .LCPI0_23
+.LPC0_7:
 	add	r0, pc
 	mov	r9, r0
-	ldr	r0, .LCPI0_26
-.LPC0_9:
+	ldr	r0, .LCPI0_24
+.LPC0_8:
 	add	r0, pc
 	mov	r10, r0
-.LBB0_19:                               @ %loop.body.i5
+.LBB0_17:                               @ %loop.body.i6
                                         @ =>This Loop Header: Depth=1
-                                        @     Child Loop BB0_26 Depth 2
-                                        @     Child Loop BB0_40 Depth 2
+                                        @     Child Loop BB0_24 Depth 2
+                                        @     Child Loop BB0_39 Depth 2
 	mov	r0, r8
-	vmov.f32	s10, s0
-	ldr.w	r12, [r0, r1, lsl #2]
+	vmov.f32	s6, s0
+	ldr.w	r7, [r0, r1, lsl #2]
 	mov	r0, r9
 	ldr.w	r6, [r0, r1, lsl #2]
 	mov	r0, r10
 	ldr.w	r2, [r0, r1, lsl #2]
 	cmp	r6, r2
-	ble	.LBB0_27
-@ %bb.20:                               @ %loop.body3.lr.ph.i
-                                        @   in Loop: Header=BB0_19 Depth=1
+	ble	.LBB0_25
+@ %bb.18:                               @ %loop.body3.lr.ph.i
+                                        @   in Loop: Header=BB0_17 Depth=1
 	subs	r5, r6, r2
 	subs	r3, r6, #1
 	mov	r4, r2
-	vmov	s10, r5
+	vmov	s6, r5
 	subs	r3, r3, r2
 	ands	r5, r5, #3
-	vcvt.f32.s32	s12, s10
-	vmov.f32	s10, s0
-	beq	.LBB0_24
-@ %bb.21:                               @ %loop.body3.i.prol
-                                        @   in Loop: Header=BB0_19 Depth=1
-	mov	r7, lr
-	vdiv.f32	s1, s2, s12
-	vmov.f32	s10, s0
+	vcvt.f32.s32	s8, s6
+	vmov.f32	s6, s0
+	beq	.LBB0_22
+@ %bb.19:                               @ %loop.body3.i.prol
+                                        @   in Loop: Header=BB0_17 Depth=1
+	mov	r0, r12
+	vdiv.f32	s12, s0, s8
+	vmov.f32	s6, s0
 	cmp	r5, #1
-	add.w	r4, r7, r2, lsl #2
-	vldr	s14, [r4]
+	add.w	r4, r0, r2, lsl #2
+	vldr	s10, [r4]
 	add.w	r4, r2, #1
-	vmla.f32	s10, s14, s1
-	beq	.LBB0_24
-@ %bb.22:                               @ %loop.body3.i.prol.1
-                                        @   in Loop: Header=BB0_19 Depth=1
-	add.w	r0, r7, r4, lsl #2
-	vdiv.f32	s1, s4, s12
-	adds	r4, r2, #2
+	vmla.f32	s6, s10, s12
+	beq	.LBB0_22
+@ %bb.20:                               @ %loop.body3.i.prol.1
+                                        @   in Loop: Header=BB0_17 Depth=1
+	mov	lr, r0
+	vdiv.f32	s12, s2, s8
 	cmp	r5, #2
-	vldr	s14, [r0]
-	vmla.f32	s10, s14, s1
-	beq	.LBB0_24
-@ %bb.23:                               @ %loop.body3.i.prol.2
-                                        @   in Loop: Header=BB0_19 Depth=1
-	add.w	r0, r7, r4, lsl #2
-	vdiv.f32	s1, s6, s12
+	add.w	r0, lr, r4, lsl #2
+	add.w	r4, r2, #2
+	vldr	s10, [r0]
+	vmla.f32	s6, s10, s12
+	beq	.LBB0_22
+@ %bb.21:                               @ %loop.body3.i.prol.2
+                                        @   in Loop: Header=BB0_17 Depth=1
+	add.w	r0, lr, r4, lsl #2
+	vdiv.f32	s12, s4, s8
 	adds	r4, r2, #3
-	vldr	s14, [r0]
-	vmla.f32	s10, s14, s1
-.LBB0_24:                               @ %loop.body3.i.prol.loopexit
-                                        @   in Loop: Header=BB0_19 Depth=1
+	vldr	s10, [r0]
+	vmla.f32	s6, s10, s12
+.LBB0_22:                               @ %loop.body3.i.prol.loopexit
+                                        @   in Loop: Header=BB0_17 Depth=1
 	cmp	r3, #3
-	blo	.LBB0_27
-@ %bb.25:                               @ %loop.body3.lr.ph.i.new
-                                        @   in Loop: Header=BB0_19 Depth=1
-	mov	r0, lr
+	blo	.LBB0_25
+@ %bb.23:                               @ %loop.body3.lr.ph.i.new
+                                        @   in Loop: Header=BB0_17 Depth=1
+	mov	r0, r12
 	rsbs	r2, r2, #0
 	add.w	r3, r0, r4, lsl #2
 	adds	r3, #8
-.LBB0_26:                               @ %loop.body3.i
-                                        @   Parent Loop BB0_19 Depth=1
+.LBB0_24:                               @ %loop.body3.i
+                                        @   Parent Loop BB0_17 Depth=1
                                         @ =>  This Inner Loop Header: Depth=2
 	adds	r5, r2, r4
 	adds	r4, #4
-	vmov	s14, r5
-	adds	r0, r5, #3
-	adds	r7, r5, #2
-	adds	r5, #1
+	vmov	s10, r5
+	adds	r0, r5, #1
 	cmp	r6, r4
-	vcvt.f32.s32	s14, s14
-	vmov	s1, r5
-	vmov	s3, r7
-	vmov	s13, r0
-	vcvt.f32.s32	s1, s1
-	vadd.f32	s14, s14, s2
-	vldr	s5, [r3, #-8]
-	vldr	s7, [r3, #-4]
-	vldr	s9, [r3]
-	vldr	s11, [r3, #4]
-	vcvt.f32.s32	s3, s3
-	vcvt.f32.s32	s13, s13
+	vcvt.f32.s32	s10, s10
+	vmov	s5, r0
+	add.w	r0, r5, #3
+	add.w	r5, r5, #2
+	vldr	s12, [r3, #-8]
+	vldr	s14, [r3, #-4]
+	vldr	s1, [r3]
+	vldr	s3, [r3, #4]
 	add.w	r3, r3, #16
-	vdiv.f32	s14, s14, s12
-	vadd.f32	s1, s1, s2
-	vadd.f32	s3, s3, s2
-	vmla.f32	s10, s5, s14
-	vdiv.f32	s14, s1, s12
-	vadd.f32	s1, s13, s2
-	vdiv.f32	s3, s3, s12
-	vmla.f32	s10, s7, s14
-	vdiv.f32	s14, s1, s12
-	vmla.f32	s10, s9, s3
-	vmla.f32	s10, s11, s14
-	bne	.LBB0_26
-.LBB0_27:                               @ %loop.init6.i
-                                        @   in Loop: Header=BB0_19 Depth=1
-	cmp	r12, r6
-	ble.w	.LBB0_41
-@ %bb.28:                               @ %loop.body8.lr.ph.i
-                                        @   in Loop: Header=BB0_19 Depth=1
-	sub.w	r3, r12, r6
-	sub.w	r0, r12, #1
-	vmov	s12, r3
+	vdiv.f32	s10, s10, s8
+	vmov	s7, r5
+	vcvt.f32.s32	s5, s5
+	vmov	s9, r0
+	vmla.f32	s6, s12, s10
+	vcvt.f32.s32	s7, s7
+	vdiv.f32	s10, s5, s8
+	vcvt.f32.s32	s12, s9
+	vmla.f32	s6, s14, s10
+	vdiv.f32	s5, s7, s8
+	vdiv.f32	s10, s12, s8
+	vmla.f32	s6, s1, s5
+	vmla.f32	s6, s3, s10
+	bne	.LBB0_24
+.LBB0_25:                               @ %loop.init6.i
+                                        @   in Loop: Header=BB0_17 Depth=1
+	cmp	r7, r6
+	ble.w	.LBB0_40
+@ %bb.26:                               @ %loop.body8.lr.ph.i
+                                        @   in Loop: Header=BB0_17 Depth=1
+	subs	r3, r7, r6
+	subs	r0, r7, #1
+	vmov	s8, r3
 	subs	r2, r0, r6
 	ands	r4, r3, #3
-	vcvt.f32.s32	s12, s12
-	beq	.LBB0_37
-@ %bb.29:                               @ %loop.body8.i.prol
-                                        @   in Loop: Header=BB0_19 Depth=1
-	vmov	s14, r3
-	mov	r5, lr
+	vcvt.f32.s32	s8, s8
+	beq	.LBB0_36
+@ %bb.27:                               @ %loop.body8.i.prol
+                                        @   in Loop: Header=BB0_17 Depth=1
+	mov	r5, r12
+	vmov	s10, r3
 	adds	r3, r6, #1
 	cmp	r4, #1
-	vcvt.f32.s32	s14, s14
 	add.w	r0, r5, r6, lsl #2
-	vadd.f32	s14, s14, s8
-	vldr	s1, [r0]
-	vdiv.f32	s14, s14, s12
-	vmla.f32	s10, s1, s14
-	beq	.LBB0_38
-@ %bb.30:                               @ %loop.body8.i.prol.1
-                                        @   in Loop: Header=BB0_19 Depth=1
-	sub.w	r0, r12, r3
+	vldr	s12, [r0]
+	vcvt.f32.s32	s10, s10
+	vdiv.f32	s10, s10, s8
+	vmla.f32	s6, s12, s10
+	beq	.LBB0_37
+@ %bb.28:                               @ %loop.body8.i.prol.1
+                                        @   in Loop: Header=BB0_17 Depth=1
+	add.w	r0, r5, r3, lsl #2
+	subs	r3, r7, r3
 	cmp	r4, #2
-	vmov	s14, r0
-	add.w	r0, r5, r3, lsl #2
+	vmov	s10, r3
+	vldr	s12, [r0]
 	add.w	r3, r6, #2
-	vcvt.f32.s32	s14, s14
-	vldr	s1, [r0]
-	vadd.f32	s14, s14, s8
-	vdiv.f32	s14, s14, s12
-	vmla.f32	s10, s1, s14
-	beq	.LBB0_38
-@ %bb.31:                               @ %loop.body8.i.prol.2
-                                        @   in Loop: Header=BB0_19 Depth=1
-	sub.w	r0, r12, r3
-	vmov	s14, r0
+	vcvt.f32.s32	s10, s10
+	vdiv.f32	s10, s10, s8
+	vmla.f32	s6, s12, s10
+	beq	.LBB0_37
+@ %bb.29:                               @ %loop.body8.i.prol.2
+                                        @   in Loop: Header=BB0_17 Depth=1
 	add.w	r0, r5, r3, lsl #2
+	subs	r3, r7, r3
+	vmov	s10, r3
+	vldr	s12, [r0]
 	adds	r3, r6, #3
-	vcvt.f32.s32	s14, s14
-	vldr	s1, [r0]
-	vadd.f32	s14, s14, s8
-	vdiv.f32	s14, s14, s12
-	vmla.f32	s10, s1, s14
+	vcvt.f32.s32	s10, s10
+	vdiv.f32	s10, s10, s8
+	vmla.f32	s6, s12, s10
 	cmp	r2, #3
-	bhs	.LBB0_39
-	b	.LBB0_41
+	bhs	.LBB0_38
+	b	.LBB0_40
+	.p2align	2
+@ %bb.30:
+.LCPI0_19:
+	.long	twiddles_256-(.LPC0_4+4)
+	.p2align	2
+@ %bb.31:
+.LCPI0_20:
+	.long	g_3-(.LPC0_5+4)
 	.p2align	2
 @ %bb.32:
-.LCPI0_22:
-	.long	g_3-(.LPC0_6+4)
+.LCPI0_21:
+	.long	filterEnd_Node_1079-(.LPC0_6+4)
 	.p2align	2
 @ %bb.33:
-.LCPI0_23:
-	.long	filterEnd_Node_1150-(.LPC0_7+4)
-	.p2align	2
-@ %bb.34:
-.LCPI0_24:
+.LCPI0_22:
 	.long	0                       @ float 0
 	.p2align	2
-@ %bb.35:
-.LCPI0_25:
-	.long	filterCenter_Node_1150-(.LPC0_8+4)
+@ %bb.34:
+.LCPI0_23:
+	.long	filterCenter_Node_1079-(.LPC0_7+4)
 	.p2align	2
-@ %bb.36:
-.LCPI0_26:
-	.long	filterStart_Node_1150-(.LPC0_9+4)
-.LBB0_37:                               @   in Loop: Header=BB0_19 Depth=1
+@ %bb.35:
+.LCPI0_24:
+	.long	filterStart_Node_1079-(.LPC0_8+4)
+.LBB0_36:                               @   in Loop: Header=BB0_17 Depth=1
 	mov	r3, r6
-.LBB0_38:                               @ %loop.body8.i.prol.loopexit
-                                        @   in Loop: Header=BB0_19 Depth=1
+.LBB0_37:                               @ %loop.body8.i.prol.loopexit
+                                        @   in Loop: Header=BB0_17 Depth=1
 	cmp	r2, #3
-	blo	.LBB0_41
-.LBB0_39:                               @ %loop.body8.lr.ph.i.new
-                                        @   in Loop: Header=BB0_19 Depth=1
-	mov	r0, lr
-	sub.w	r2, r12, r3
+	blo	.LBB0_40
+.LBB0_38:                               @ %loop.body8.lr.ph.i.new
+                                        @   in Loop: Header=BB0_17 Depth=1
+	mov	r0, r12
+	subs	r2, r7, r3
 	add.w	r0, r0, r3, lsl #2
 	add.w	r3, r0, #8
-.LBB0_40:                               @ %loop.body8.i
-                                        @   Parent Loop BB0_19 Depth=1
+.LBB0_39:                               @ %loop.body8.i
+                                        @   Parent Loop BB0_17 Depth=1
                                         @ =>  This Inner Loop Header: Depth=2
-	vmov	s14, r2
-	subs	r6, r2, #1
+	vmov	s10, r2
+	subs	r0, r2, #1
 	subs	r7, r2, #2
+	vcvt.f32.s32	s10, s10
+	vmov	s12, r0
+	vldr	s14, [r3, #-8]
 	subs	r0, r2, #3
+	vldr	s1, [r3, #-4]
+	vldr	s3, [r3]
+	vldr	s5, [r3, #4]
+	vmov	s7, r7
+	adds	r3, #16
 	subs	r2, #4
-	vcvt.f32.s32	s14, s14
-	vmov	s1, r6
-	vmov	s3, r7
-	vmov	s13, r0
-	vcvt.f32.s32	s1, s1
-	vadd.f32	s14, s14, s8
-	vldr	s5, [r3, #-8]
-	vldr	s7, [r3, #-4]
-	vldr	s9, [r3]
-	vldr	s11, [r3, #4]
-	vcvt.f32.s32	s3, s3
-	vcvt.f32.s32	s13, s13
-	add.w	r3, r3, #16
-	vdiv.f32	s14, s14, s12
-	vadd.f32	s1, s1, s8
-	vadd.f32	s3, s3, s8
-	vmla.f32	s10, s5, s14
-	vdiv.f32	s14, s1, s12
-	vadd.f32	s1, s13, s8
-	vdiv.f32	s3, s3, s12
-	vmla.f32	s10, s7, s14
-	vdiv.f32	s14, s1, s12
-	vmla.f32	s10, s9, s3
-	vmla.f32	s10, s11, s14
-	bne	.LBB0_40
-.LBB0_41:                               @ %loop.after10.i
-                                        @   in Loop: Header=BB0_19 Depth=1
-	ldr	r4, .LCPI0_11
-.LPC0_10:
+	vcvt.f32.s32	s12, s12
+	vdiv.f32	s10, s10, s8
+	vcvt.f32.s32	s7, s7
+	vmov	s9, r0
+	vmla.f32	s6, s14, s10
+	vdiv.f32	s12, s12, s8
+	vcvt.f32.s32	s10, s9
+	vdiv.f32	s14, s7, s8
+	vmla.f32	s6, s1, s12
+	vdiv.f32	s10, s10, s8
+	vmla.f32	s6, s3, s14
+	vmla.f32	s6, s5, s10
+	bne	.LBB0_39
+.LBB0_40:                               @ %loop.after10.i
+                                        @   in Loop: Header=BB0_17 Depth=1
+	ldr	r4, .LCPI0_10
+.LPC0_9:
 	add	r4, pc
 	add.w	r0, r4, r1, lsl #2
 	adds	r1, #1
 	cmp	r1, #80
-	vstr	s10, [r0]
-	bne.w	.LBB0_19
-@ %bb.42:                               @ %loop.body.i4.preheader
-	ldr	r1, .LCPI0_12
-	ldr	r5, .LCPI0_13
+	vstr	s6, [r0]
+	bne.w	.LBB0_17
+@ %bb.41:                               @ %loop.body.i5.preheader
+	ldr	r1, .LCPI0_11
+	ldr	r5, .LCPI0_12
 	movs	r0, #0
-.LPC0_11:
+.LPC0_10:
 	add	r1, pc
-.LPC0_12:
+.LPC0_11:
 	add	r5, pc
-.LBB0_43:                               @ %loop.body.i4
+.LBB0_42:                               @ %loop.body.i5
                                         @ =>This Inner Loop Header: Depth=1
 	adds	r2, r4, r0
 	adds	r3, r1, r0
@@ -768,14 +738,14 @@ mfcc_Filter:
 	vldr	s0, [r3, #60]
 	vadd.f32	s0, s2, s0
 	vstr	s0, [r7, #60]
-	bne.w	.LBB0_43
-@ %bb.44:                               @ %loop.body.i.preheader
-	ldr	r0, .LCPI0_14
+	bne.w	.LBB0_42
+@ %bb.43:                               @ %loop.body.i.preheader
+	ldr	r0, .LCPI0_13
 	movs	r4, #0
-.LPC0_13:
+.LPC0_12:
 	add	r0, pc
 	mov	r11, r0
-.LBB0_45:                               @ %loop.body.i
+.LBB0_44:                               @ %loop.body.i
                                         @ =>This Inner Loop Header: Depth=1
 	ldr	r0, [r5, r4]
 	bl	logf
@@ -846,14 +816,14 @@ mfcc_Filter:
 	adds	r4, #80
 	str	r0, [r7, #76]
 	cmp.w	r4, #320
-	bne	.LBB0_45
-@ %bb.46:                               @ %_Node__UnaryOperationNode_float__in_80_out_80_Node_1153.exit
+	bne	.LBB0_44
+@ %bb.45:                               @ %UnaryOperationNodeCodeNode_1082_12161962390740664412.exit
 	ldr	r0, [sp, #8]            @ 4-byte Reload
-	cbz	r0, .LBB0_48
-@ %bb.47:                               @ %loop.init
-	ldr	r1, .LCPI0_15
+	cbz	r0, .LBB0_47
+@ %bb.46:                               @ %loop.init
+	ldr	r1, .LCPI0_14
 	mov.w	r2, #320
-.LPC0_14:
+.LPC0_13:
 	add	r1, pc
 	add.w	sp, sp, #6144
 	add	sp, #16
@@ -861,24 +831,24 @@ mfcc_Filter:
 	add	sp, #4
 	pop.w	{r4, r5, r6, r7, r8, r9, r10, r11, lr}
 	b	memcpy
-.LBB0_48:                               @ %if.after
+.LBB0_47:                               @ %if.after
 	add.w	sp, sp, #6144
 	add	sp, #16
 	vpop	{d8, d9}
 	add	sp, #4
 	pop.w	{r4, r5, r6, r7, r8, r9, r10, r11, pc}
 	.p2align	2
-@ %bb.49:
+@ %bb.48:
+.LCPI0_10:
+	.long	g_4-(.LPC0_9+4)
 .LCPI0_11:
-	.long	g_4-(.LPC0_10+4)
+	.long	c_1-(.LPC0_10+4)
 .LCPI0_12:
-	.long	c_1-(.LPC0_11+4)
+	.long	g_5-(.LPC0_11+4)
 .LCPI0_13:
-	.long	g_5-(.LPC0_12+4)
+	.long	g_6-(.LPC0_12+4)
 .LCPI0_14:
 	.long	g_6-(.LPC0_13+4)
-.LCPI0_15:
-	.long	g_6-(.LPC0_14+4)
 .Lfunc_end0:
 	.size	mfcc_Filter, .Lfunc_end0-mfcc_Filter
 	.cantunwind
@@ -905,26 +875,26 @@ FFTC_float_256:
 	adds	r6, r4, r1
 	ldr	r3, [r2, #8]
 	ldr	r5, [r2, #12]
+	ldr	r6, [r6, #-60]
 	str.w	r3, [r8, r0]
 	add.w	r3, r8, r0
 	str	r5, [r3, #4]
-	ldr	r6, [r6, #-60]
 	ldr	r5, [r2, #4]
 	str	r6, [r4, r0]
 	adds	r6, r4, r0
 	adds	r0, #32
-	str	r5, [r6, #4]
 	cmp.w	r0, #1024
-	ldr	r5, [r2, #24]
+	str	r5, [r6, #4]
 	ldr	r7, [r2, #28]
+	ldr	r5, [r2, #24]
 	str	r7, [r3, #12]
 	str	r5, [r3, #8]
 	ldr	r7, [r2, #16]
 	ldr	r5, [r2, #20]
 	str	r5, [r6, #12]
 	str	r7, [r6, #8]
-	ldr	r7, [r2, #40]
 	ldr	r5, [r2, #44]
+	ldr	r7, [r2, #40]
 	str	r5, [r3, #20]
 	str	r7, [r3, #16]
 	ldr	r7, [r2, #32]
@@ -952,29 +922,29 @@ FFTC_float_256:
 	ldr	r2, [r1, #4]
 	cmp.w	r0, #1024
 	str.w	r3, [r7, #1024]
+	ldr	r3, [r1, #12]
 	str.w	r2, [r7, #1028]
 	ldr	r2, [r1, #8]
-	ldr	r3, [r1, #12]
 	str.w	r3, [r7, #1036]
+	ldr	r3, [r1, #20]
 	str.w	r2, [r7, #1032]
 	ldr	r2, [r1, #16]
-	ldr	r3, [r1, #20]
 	str.w	r3, [r7, #1044]
+	ldr	r3, [r1, #28]
 	str.w	r2, [r7, #1040]
 	ldr	r2, [r1, #24]
-	ldr	r3, [r1, #28]
 	str.w	r3, [r7, #1052]
+	ldr	r3, [r1, #36]
 	str.w	r2, [r7, #1048]
 	ldr	r2, [r1, #32]
-	ldr	r3, [r1, #36]
 	str.w	r3, [r7, #1060]
+	ldr	r3, [r1, #44]
 	str.w	r2, [r7, #1056]
 	ldr	r2, [r1, #40]
-	ldr	r3, [r1, #44]
 	str.w	r3, [r7, #1068]
+	ldr	r3, [r1, #52]
 	str.w	r2, [r7, #1064]
 	ldr	r2, [r1, #48]
-	ldr	r3, [r1, #52]
 	str.w	r3, [r7, #1076]
 	str.w	r2, [r7, #1072]
 	ldr	r2, [r1, #56]
@@ -1139,26 +1109,26 @@ FFTC_float_128:
 	adds	r6, r4, r1
 	ldr	r3, [r2, #8]
 	ldr	r5, [r2, #12]
+	ldr	r6, [r6, #-60]
 	str.w	r3, [r8, r0]
 	add.w	r3, r8, r0
 	str	r5, [r3, #4]
-	ldr	r6, [r6, #-60]
 	ldr	r5, [r2, #4]
 	str	r6, [r4, r0]
 	adds	r6, r4, r0
 	adds	r0, #32
-	str	r5, [r6, #4]
 	cmp.w	r0, #512
-	ldr	r5, [r2, #24]
+	str	r5, [r6, #4]
 	ldr	r7, [r2, #28]
+	ldr	r5, [r2, #24]
 	str	r7, [r3, #12]
 	str	r5, [r3, #8]
 	ldr	r7, [r2, #16]
 	ldr	r5, [r2, #20]
 	str	r5, [r6, #12]
 	str	r7, [r6, #8]
-	ldr	r7, [r2, #40]
 	ldr	r5, [r2, #44]
+	ldr	r7, [r2, #40]
 	str	r5, [r3, #20]
 	str	r7, [r3, #16]
 	ldr	r7, [r2, #32]
@@ -1186,29 +1156,29 @@ FFTC_float_128:
 	ldr	r2, [r1, #4]
 	cmp.w	r0, #512
 	str.w	r3, [r7, #512]
+	ldr	r3, [r1, #12]
 	str.w	r2, [r7, #516]
 	ldr	r2, [r1, #8]
-	ldr	r3, [r1, #12]
 	str.w	r3, [r7, #524]
+	ldr	r3, [r1, #20]
 	str.w	r2, [r7, #520]
 	ldr	r2, [r1, #16]
-	ldr	r3, [r1, #20]
 	str.w	r3, [r7, #532]
+	ldr	r3, [r1, #28]
 	str.w	r2, [r7, #528]
 	ldr	r2, [r1, #24]
-	ldr	r3, [r1, #28]
 	str.w	r3, [r7, #540]
+	ldr	r3, [r1, #36]
 	str.w	r2, [r7, #536]
 	ldr	r2, [r1, #32]
-	ldr	r3, [r1, #36]
 	str.w	r3, [r7, #548]
+	ldr	r3, [r1, #44]
 	str.w	r2, [r7, #544]
 	ldr	r2, [r1, #40]
-	ldr	r3, [r1, #44]
 	str.w	r3, [r7, #556]
+	ldr	r3, [r1, #52]
 	str.w	r2, [r7, #552]
 	ldr	r2, [r1, #48]
-	ldr	r3, [r1, #52]
 	str.w	r3, [r7, #564]
 	str.w	r2, [r7, #560]
 	ldr	r2, [r1, #56]
@@ -1373,26 +1343,26 @@ FFTC_float_64:
 	adds	r6, r4, r1
 	ldr	r3, [r2, #8]
 	ldr	r5, [r2, #12]
+	ldr	r6, [r6, #-60]
 	str.w	r3, [r8, r0]
 	add.w	r3, r8, r0
 	str	r5, [r3, #4]
-	ldr	r6, [r6, #-60]
 	ldr	r5, [r2, #4]
 	str	r6, [r4, r0]
 	adds	r6, r4, r0
 	adds	r0, #32
-	str	r5, [r6, #4]
 	cmp.w	r0, #256
-	ldr	r5, [r2, #24]
+	str	r5, [r6, #4]
 	ldr	r7, [r2, #28]
+	ldr	r5, [r2, #24]
 	str	r7, [r3, #12]
 	str	r5, [r3, #8]
 	ldr	r7, [r2, #16]
 	ldr	r5, [r2, #20]
 	str	r5, [r6, #12]
 	str	r7, [r6, #8]
-	ldr	r7, [r2, #40]
 	ldr	r5, [r2, #44]
+	ldr	r7, [r2, #40]
 	str	r5, [r3, #20]
 	str	r7, [r3, #16]
 	ldr	r7, [r2, #32]
@@ -1420,29 +1390,29 @@ FFTC_float_64:
 	ldr	r2, [r1, #4]
 	cmp.w	r0, #256
 	str.w	r3, [r7, #256]
+	ldr	r3, [r1, #12]
 	str.w	r2, [r7, #260]
 	ldr	r2, [r1, #8]
-	ldr	r3, [r1, #12]
 	str.w	r3, [r7, #268]
+	ldr	r3, [r1, #20]
 	str.w	r2, [r7, #264]
 	ldr	r2, [r1, #16]
-	ldr	r3, [r1, #20]
 	str.w	r3, [r7, #276]
+	ldr	r3, [r1, #28]
 	str.w	r2, [r7, #272]
 	ldr	r2, [r1, #24]
-	ldr	r3, [r1, #28]
 	str.w	r3, [r7, #284]
+	ldr	r3, [r1, #36]
 	str.w	r2, [r7, #280]
 	ldr	r2, [r1, #32]
-	ldr	r3, [r1, #36]
 	str.w	r3, [r7, #292]
+	ldr	r3, [r1, #44]
 	str.w	r2, [r7, #288]
 	ldr	r2, [r1, #40]
-	ldr	r3, [r1, #44]
 	str.w	r3, [r7, #300]
+	ldr	r3, [r1, #52]
 	str.w	r2, [r7, #296]
 	ldr	r2, [r1, #48]
-	ldr	r3, [r1, #52]
 	str.w	r3, [r7, #308]
 	str.w	r2, [r7, #304]
 	ldr	r2, [r1, #56]
@@ -1607,26 +1577,26 @@ FFTC_float_32:
 	adds	r5, r4, r1
 	ldr	r3, [r2, #8]
 	ldr	r6, [r2, #12]
+	ldr	r5, [r5, #-60]
 	str.w	r3, [r8, r0]
 	add.w	r3, r8, r0
 	str	r6, [r3, #4]
-	ldr	r5, [r5, #-60]
 	ldr	r6, [r2, #4]
 	str	r5, [r4, r0]
 	adds	r5, r4, r0
 	adds	r0, #32
-	str	r6, [r5, #4]
 	cmp	r0, #128
-	ldr	r6, [r2, #24]
+	str	r6, [r5, #4]
 	ldr	r7, [r2, #28]
+	ldr	r6, [r2, #24]
 	str	r7, [r3, #12]
 	str	r6, [r3, #8]
 	ldr	r7, [r2, #16]
 	ldr	r6, [r2, #20]
 	str	r6, [r5, #12]
 	str	r7, [r5, #8]
-	ldr	r7, [r2, #40]
 	ldr	r6, [r2, #44]
+	ldr	r7, [r2, #40]
 	str	r6, [r3, #20]
 	str	r7, [r3, #16]
 	ldr	r7, [r2, #32]
@@ -1644,69 +1614,69 @@ FFTC_float_32:
 	str	r3, [r5, #24]
 	bne	.LBB4_1
 @ %bb.2:                                @ %loop.init1
-	ldr.w	r0, [r8]
 	ldr.w	r1, [r8, #4]
+	ldr.w	r0, [r8]
 	mov	r6, r4
 	str.w	r1, [r4, #132]
 	str	r0, [r6, #128]!
-	ldr.w	r0, [r8, #8]
 	ldr.w	r1, [r8, #12]
+	ldr.w	r0, [r8, #8]
 	str.w	r1, [r4, #140]
 	str.w	r0, [r4, #136]
-	ldr.w	r0, [r8, #16]
 	ldr.w	r1, [r8, #20]
+	ldr.w	r0, [r8, #16]
 	str.w	r1, [r4, #148]
 	str.w	r0, [r4, #144]
-	ldr.w	r0, [r8, #24]
 	ldr.w	r1, [r8, #28]
+	ldr.w	r0, [r8, #24]
 	str.w	r1, [r4, #156]
 	str.w	r0, [r4, #152]
-	ldr.w	r0, [r8, #32]
 	ldr.w	r1, [r8, #36]
+	ldr.w	r0, [r8, #32]
 	str.w	r1, [r4, #164]
 	str.w	r0, [r4, #160]
-	ldr.w	r0, [r8, #40]
 	ldr.w	r1, [r8, #44]
+	ldr.w	r0, [r8, #40]
 	str.w	r1, [r4, #172]
 	str.w	r0, [r4, #168]
-	ldr.w	r0, [r8, #48]
 	ldr.w	r1, [r8, #52]
+	ldr.w	r0, [r8, #48]
 	str.w	r1, [r4, #180]
 	str.w	r0, [r4, #176]
-	ldr.w	r0, [r8, #56]
 	ldr.w	r1, [r8, #60]
+	ldr.w	r0, [r8, #56]
 	str.w	r1, [r4, #188]
 	str.w	r0, [r4, #184]
-	ldr.w	r0, [r8, #64]
 	ldr.w	r1, [r8, #68]
+	ldr.w	r0, [r8, #64]
 	str.w	r1, [r4, #196]
 	str.w	r0, [r4, #192]
-	ldr.w	r0, [r8, #72]
 	ldr.w	r1, [r8, #76]
+	ldr.w	r0, [r8, #72]
 	str.w	r1, [r4, #204]
 	str.w	r0, [r4, #200]
-	ldr.w	r0, [r8, #80]
 	ldr.w	r1, [r8, #84]
+	ldr.w	r0, [r8, #80]
 	str.w	r1, [r4, #212]
 	str.w	r0, [r4, #208]
-	ldr.w	r0, [r8, #88]
 	ldr.w	r1, [r8, #92]
+	ldr.w	r0, [r8, #88]
 	str.w	r1, [r4, #220]
 	str.w	r0, [r4, #216]
-	ldr.w	r0, [r8, #96]
 	ldr.w	r1, [r8, #100]
+	ldr.w	r0, [r8, #96]
 	str.w	r1, [r4, #228]
 	str.w	r0, [r4, #224]
-	ldr.w	r0, [r8, #104]
 	ldr.w	r1, [r8, #108]
+	ldr.w	r0, [r8, #104]
 	str.w	r1, [r4, #236]
 	str.w	r0, [r4, #232]
-	ldr.w	r0, [r8, #112]
 	ldr.w	r1, [r8, #116]
+	ldr.w	r0, [r8, #112]
 	str.w	r1, [r4, #244]
 	str.w	r0, [r4, #240]
-	ldr.w	r0, [r8, #120]
 	ldr.w	r1, [r8, #124]
+	ldr.w	r0, [r8, #120]
 	str.w	r1, [r4, #252]
 	str.w	r0, [r4, #248]
 	mov	r0, r4
@@ -1851,158 +1821,153 @@ FFTC_float_32:
 FFTC_float_16:
 	.fnstart
 @ %bb.0:                                @ %entry
-	.save	{r4, r5, r6, lr}
-	push	{r4, r5, r6, lr}
+	.save	{r4, r5, r6, r7, r8, r9, r10, r11, lr}
+	push.w	{r4, r5, r6, r7, r8, r9, r10, r11, lr}
+	.pad	#12
+	sub	sp, #12
 	mov	r4, r0
 	mov	r6, r1
-	ldr	r0, [r4, #8]
 	ldr	r1, [r4, #12]
+	ldr	r0, [r4, #8]
+	ldr	r2, [r4, #40]
+	ldr.w	r9, [r4, #44]
 	mov	r5, r4
 	str	r1, [r6, #4]
-	str	r0, [r6]
-	ldr	r0, [r4, #24]
+	str	r1, [sp, #4]            @ 4-byte Spill
 	ldr	r1, [r4, #28]
+	str	r0, [r6]
+	str	r0, [sp]                @ 4-byte Spill
+	ldr	r0, [r4, #24]
 	str	r1, [r6, #12]
 	str	r0, [r6, #8]
+	str	r1, [sp, #8]            @ 4-byte Spill
 	ldr	r0, [r4, #16]
 	ldr	r1, [r4, #20]
-	ldr	r2, [r4, #40]
-	ldr	r3, [r4, #44]
+	str.w	r9, [r6, #20]
+	str	r2, [r6, #16]
 	str	r0, [r4, #8]
 	str	r1, [r4, #12]
-	str	r3, [r6, #20]
-	str	r2, [r6, #16]
 	ldr	r0, [r4, #32]
 	ldr	r1, [r4, #36]
+	ldr.w	r10, [r4, #60]
 	ldr	r2, [r4, #56]
-	ldr	r3, [r4, #60]
 	str	r0, [r4, #16]
 	str	r1, [r4, #20]
-	str	r3, [r6, #28]
+	str.w	r10, [r6, #28]
 	str	r2, [r6, #24]
 	ldr	r0, [r4, #48]
-	ldr	r1, [r4, #52]
-	ldr	r2, [r4, #72]
-	ldr	r3, [r4, #76]
+	ldr	r2, [r4, #52]
+	ldr.w	r11, [r4, #76]
+	ldr	r3, [r4, #72]
 	str	r0, [r4, #24]
-	str	r1, [r4, #28]
-	str	r3, [r6, #36]
-	str	r2, [r6, #32]
+	str	r2, [r4, #28]
+	str.w	r11, [r6, #36]
+	str	r3, [r6, #32]
 	ldr	r0, [r5, #64]!
 	str	r0, [r4, #32]
 	ldr	r0, [r4, #68]
-	ldr	r1, [r4, #88]
-	ldr	r2, [r4, #92]
+	ldr.w	r8, [r4, #92]
+	ldr	r7, [r4, #88]
 	str	r0, [r4, #36]
-	str	r2, [r6, #44]
-	str	r1, [r6, #40]
-	ldr	r0, [r4, #80]
-	ldr	r1, [r4, #84]
-	ldr	r2, [r4, #104]
-	ldr	r3, [r4, #108]
-	str	r0, [r4, #40]
-	str	r1, [r4, #44]
-	str	r3, [r6, #52]
-	str	r2, [r6, #48]
-	ldr	r0, [r4, #96]
+	str.w	r8, [r6, #44]
+	str	r7, [r6, #40]
+	ldr	r1, [r4, #80]
+	ldr	r0, [r4, #84]
+	ldr.w	r12, [r4, #108]
+	ldr.w	lr, [r4, #104]
+	str	r1, [r4, #40]
+	str	r0, [r4, #44]
+	str.w	r12, [r6, #52]
+	str.w	lr, [r6, #48]
+	ldr	r0, [r4, #124]
+	ldr	r2, [r4, #96]
 	ldr	r1, [r4, #100]
-	ldr	r2, [r4, #120]
-	ldr	r3, [r4, #124]
-	str	r0, [r4, #48]
+	ldr	r3, [r4, #120]
+	str	r0, [r6, #60]
+	ldr	r0, [sp]                @ 4-byte Reload
+	str	r2, [r4, #48]
 	str	r1, [r4, #52]
-	str	r3, [r6, #60]
-	str	r2, [r6, #56]
+	str	r3, [r6, #56]
+	str	r0, [r5]
+	ldr	r0, [sp, #4]            @ 4-byte Reload
+	str	r0, [r4, #68]
 	ldr	r0, [r4, #112]
 	ldr	r1, [r4, #116]
 	str	r0, [r4, #56]
 	str	r1, [r4, #60]
-	ldr	r0, [r6]
-	ldr	r1, [r6, #4]
-	str	r1, [r4, #68]
-	str	r0, [r5]
+	ldr	r1, [sp, #8]            @ 4-byte Reload
 	ldr	r0, [r6, #8]
-	ldr	r1, [r6, #12]
 	str	r1, [r4, #76]
 	str	r0, [r4, #72]
 	ldr	r0, [r6, #16]
-	ldr	r1, [r6, #20]
-	str	r1, [r4, #84]
+	str.w	r9, [r4, #84]
+	mov	r1, r6
 	str	r0, [r4, #80]
 	ldr	r0, [r6, #24]
-	ldr	r1, [r6, #28]
-	str	r1, [r4, #92]
+	str.w	r10, [r4, #92]
 	str	r0, [r4, #88]
 	ldr	r0, [r6, #32]
-	ldr	r1, [r6, #36]
-	str	r1, [r4, #100]
+	str.w	r11, [r4, #100]
+	str	r7, [r4, #104]
+	str.w	r8, [r4, #108]
+	str.w	lr, [r4, #112]
+	str.w	r12, [r4, #116]
+	str	r3, [r4, #120]
 	str	r0, [r4, #96]
-	ldr	r0, [r6, #40]
-	ldr	r1, [r6, #44]
-	str	r1, [r4, #108]
-	str	r0, [r4, #104]
-	ldr	r0, [r6, #48]
-	ldr	r1, [r6, #52]
-	str	r1, [r4, #116]
-	str	r0, [r4, #112]
-	ldr	r0, [r6, #56]
-	ldr	r1, [r6, #60]
-	str	r1, [r4, #124]
-	str	r0, [r4, #120]
 	mov	r0, r4
-	mov	r1, r6
 	bl	FFTC_float_8
 	mov	r0, r5
 	mov	r1, r6
 	bl	FFTC_float_8
-	ldr	r6, [r5]
-	ldr	r0, [r4, #68]
+	ldr	r7, [r5]
+	ldr	r6, [r4, #68]
 	ldr	r1, [r4]
 	vldr	s12, .LCPI5_0
 	ldr	r2, [r4, #4]
 	vldr	s2, .LCPI5_1
 	vldr	s0, .LCPI5_2
+	ldr	r0, [r4, #12]
 	vldr	s7, .LCPI5_3
 	ldr	r3, [r4, #8]
-	ldr.w	r12, [r4, #12]
-	vmov	s6, r6
-	ldr	r6, [r4, #72]
-	vmov	s4, r0
-	ldr	r0, [r4, #80]
+	vmov	s6, r7
+	ldr	r7, [r4, #72]
+	vmov	s4, r6
+	ldr	r6, [r4, #80]
 	vmov	s3, r1
 	vmov	s15, r2
-	ldr	r1, [r4, #20]
+	ldr	r1, [r4, #16]
 	vmov.f32	s5, s6
-	vmov	s8, r6
-	ldr	r6, [r4, #76]
-	vmov	s1, r0
+	vmov	s8, r7
+	ldr	r7, [r4, #76]
+	vmov	s1, r6
 	vmls.f32	s5, s4, s12
-	ldr	r0, [r4, #16]
 	vmla.f32	s4, s6, s12
 	vmov	s6, r3
 	vadd.f32	s13, s3, s5
-	vmul.f32	s1, s1, s0
 	vmul.f32	s9, s8, s2
+	vmul.f32	s1, s1, s0
 	vsub.f32	s3, s3, s5
-	vmov	s10, r6
-	ldr	r6, [r4, #84]
+	vmov	s10, r7
+	ldr	r7, [r4, #84]
 	vmul.f32	s11, s10, s2
 	vmls.f32	s9, s10, s7
-	vmov	s10, r12
-	vmov	s14, r6
-	vmla.f32	s11, s8, s7
-	vmov	s8, r0
+	vmov	s10, r0
 	vmov	r0, s13
+	vmov	s14, r7
+	ldr	r7, [r4, #20]
+	str	r0, [r4]
+	vmla.f32	s11, s8, s7
+	vmov	s8, r1
 	vadd.f32	s5, s6, s9
 	vsub.f32	s6, s6, s9
-	vmov	s7, r1
 	vmul.f32	s14, s14, s0
-	str	r0, [r4]
 	vadd.f32	s13, s10, s11
 	vsub.f32	s10, s10, s11
 	vsub.f32	s12, s1, s14
 	vadd.f32	s14, s1, s14
 	vadd.f32	s1, s15, s4
 	vsub.f32	s4, s15, s4
+	vmov	s7, r7
 	vmov	r0, s1
 	vadd.f32	s9, s8, s12
 	vadd.f32	s11, s7, s14
@@ -2154,7 +2119,8 @@ FFTC_float_16:
 	str	r0, [r4, #120]
 	vmov	r0, s0
 	str	r0, [r4, #124]
-	pop	{r4, r5, r6, pc}
+	add	sp, #12
+	pop.w	{r4, r5, r6, r7, r8, r9, r10, r11, pc}
 	.p2align	2
 @ %bb.1:
 .LCPI5_0:
@@ -2189,176 +2155,162 @@ FFTC_float_16:
 FFTC_float_8:
 	.fnstart
 @ %bb.0:                                @ %entry
-	.save	{r4, r5, r6, lr}
-	push	{r4, r5, r6, lr}
+	.save	{r4, r5, r6, r7, r8, r9, r10, r11, lr}
+	push.w	{r4, r5, r6, r7, r8, r9, r10, r11, lr}
+	.pad	#4
+	sub	sp, #4
 	.vsave	{d8, d9, d10, d11, d12, d13}
 	vpush	{d8, d9, d10, d11, d12, d13}
-	ldr	r2, [r0, #8]
-	ldr	r3, [r0, #12]
-	vldr	s14, .LCPI6_0
-	str	r3, [r1, #4]
-	str	r2, [r1]
-	ldr	r2, [r0, #24]
-	ldr	r3, [r0, #28]
-	str	r3, [r1, #12]
-	str	r2, [r1, #8]
-	ldr.w	lr, [r0, #16]
-	ldr	r3, [r0, #20]
-	ldr.w	r12, [r0, #40]
-	ldr	r2, [r0, #44]
-	str.w	lr, [r0, #8]
-	str	r3, [r0, #12]
-	str	r2, [r1, #20]
-	str.w	r12, [r1, #16]
-	ldr.w	lr, [r0, #32]
-	ldr	r3, [r0, #36]
-	ldr.w	r12, [r0, #56]
-	ldr	r2, [r0, #60]
-	str.w	lr, [r0, #16]
-	str	r3, [r0, #20]
-	str	r2, [r1, #28]
-	str.w	r12, [r1, #24]
-	ldr.w	lr, [r0, #52]
-	ldr.w	r12, [r0, #48]
-	str.w	r12, [r0, #24]
-	str.w	lr, [r0, #28]
-	vmov	s5, lr
-	ldr	r2, [r1]
-	ldr	r3, [r1, #4]
-	str	r3, [r0, #36]
-	str	r2, [r0, #32]
-	vmov	s2, r3
-	vmov	s12, r2
-	ldr	r4, [r1, #8]
-	ldr	r5, [r1, #12]
-	str	r5, [r0, #44]
-	str	r4, [r0, #40]
-	vmov	s0, r5
-	vmov	s8, r4
-	ldr	r3, [r1, #16]
-	ldr	r5, [r1, #20]
-	str	r5, [r0, #52]
-	str	r3, [r0, #48]
-	vmov	s6, r5
-	vmov	s1, r3
-	ldr	r6, [r1, #24]
-	ldr	r1, [r1, #28]
+	.pad	#8
+	sub	sp, #8
+	ldr	r2, [r0]
 	ldr	r5, [r0, #12]
 	ldr	r4, [r0, #8]
+	ldr	r6, [r0, #24]
+	ldr	r7, [r0, #28]
+	ldr.w	lr, [r0, #40]
+	ldr.w	r12, [r0, #44]
+	ldr	r3, [r0, #60]
+	ldr.w	r10, [r0, #20]
+	vldr	s14, .LCPI6_0
+	ldr.w	r8, [r0, #16]
+	ldr.w	r9, [r0, #36]
+	ldr.w	r11, [r0, #32]
+	vldr	s26, .LCPI6_3
+	str	r2, [sp]                @ 4-byte Spill
 	ldr	r2, [r0, #4]
-	ldr	r3, [r0, #20]
-	vsub.f32	s13, s12, s1
-	vadd.f32	s12, s12, s1
-	vsub.f32	s9, s2, s6
-	vadd.f32	s2, s2, s6
-	vmov	s4, r1
-	vmov	s10, r6
-	ldr	r1, [r0]
-	ldr	r6, [r0, #16]
-	vmov	s7, r5
-	vmov	s6, r4
-	vmov	s22, r3
-	vmov	s24, r2
-	vsub.f32	s3, s0, s4
-	vsub.f32	s11, s8, s10
-	vadd.f32	s8, s8, s10
-	vsub.f32	s1, s7, s5
-	vadd.f32	s0, s0, s4
-	vmov	s4, r12
-	vadd.f32	s5, s5, s7
-	vldr	s10, .LCPI6_1
+	str	r5, [r1, #4]
+	str	r4, [r1]
+	str	r7, [r1, #12]
+	str	r6, [r1, #8]
+	str.w	r12, [r1, #20]
+	str.w	lr, [r1, #16]
+	str	r3, [r1, #28]
+	vmov	s6, r5
+	vmov	s8, r12
+	vmov	s10, r7
+	vmov	s12, r3
+	vmov	s0, r4
+	vmov	s1, lr
+	vmov	s2, r6
+	vmov	s5, r10
+	vmov	s16, r8
+	vmov	s20, r9
+	vsub.f32	s3, s10, s12
+	vsub.f32	s7, s6, s8
+	vadd.f32	s6, s6, s8
+	vadd.f32	s8, s10, s12
+	vsub.f32	s11, s0, s1
+	vadd.f32	s0, s0, s1
+	vmov	s1, r11
+	str	r2, [sp, #4]            @ 4-byte Spill
+	ldr	r2, [r0, #56]
 	vsub.f32	s3, s14, s3
-	vadd.f32	s7, s12, s8
-	vmov	s15, r6
-	vmov	s16, r1
-	vadd.f32	s18, s9, s11
-	vsub.f32	s9, s9, s11
-	vsub.f32	s8, s12, s8
-	vadd.f32	s12, s2, s0
-	vadd.f32	s26, s4, s6
-	vsub.f32	s4, s6, s4
-	vsub.f32	s1, s14, s1
-	vsub.f32	s2, s2, s0
-	vmov.f32	s6, s7
-	vadd.f32	s20, s13, s3
-	vadd.f32	s11, s16, s15
-	vsub.f32	s15, s16, s15
-	vmul.f32	s16, s18, s10
-	vmul.f32	s0, s9, s10
-	vldr	s9, .LCPI6_2
-	vsub.f32	s3, s13, s3
-	vldr	s13, .LCPI6_3
-	vmul.f32	s18, s20, s10
-	vadd.f32	s20, s24, s22
-	vsub.f32	s22, s24, s22
-	vmls.f32	s6, s12, s14
-	vmla.f32	s12, s7, s14
-	vadd.f32	s24, s26, s11
-	vsub.f32	s7, s11, s26
-	vadd.f32	s11, s5, s20
-	vsub.f32	s5, s20, s5
-	vmov.f32	s20, s2
-	vadd.f32	s14, s6, s24
-	vsub.f32	s6, s24, s6
-	vnmls.f32	s20, s8, s9
-	vmla.f32	s8, s2, s9
+	vadd.f32	s22, s6, s8
+	vsub.f32	s6, s6, s8
+	vadd.f32	s15, s11, s3
+	vsub.f32	s3, s11, s3
+	str	r2, [r1, #24]
+	vmov	s4, r2
+	ldr	r1, [r0, #48]
+	ldr	r2, [r0, #52]
+	vsub.f32	s9, s2, s4
+	vadd.f32	s2, s2, s4
+	vldr	s4, .LCPI6_1
+	vmov	s10, r2
+	ldr	r2, [sp]                @ 4-byte Reload
+	vmov	s18, r1
+	ldr	r1, [sp, #4]            @ 4-byte Reload
+	vadd.f32	s13, s7, s9
+	vsub.f32	s7, s7, s9
+	vsub.f32	s24, s5, s10
+	vadd.f32	s10, s5, s10
+	vadd.f32	s5, s0, s2
+	vmul.f32	s8, s13, s4
+	vmul.f32	s13, s15, s4
+	vadd.f32	s15, s16, s18
+	vsub.f32	s0, s0, s2
+	vsub.f32	s16, s16, s18
+	vmul.f32	s7, s7, s4
+	vmov	s12, r2
+	vmov	s9, r1
+	vadd.f32	s2, s12, s1
+	vadd.f32	s11, s9, s20
+	vsub.f32	s9, s9, s20
+	vmov.f32	s20, s5
+	vsub.f32	s12, s12, s1
+	vsub.f32	s1, s14, s24
+	vldr	s24, .LCPI6_2
+	vmls.f32	s20, s22, s14
+	vmla.f32	s22, s5, s14
+	vadd.f32	s18, s2, s15
+	vadd.f32	s5, s11, s10
+	vsub.f32	s2, s2, s15
+	vmov.f32	s15, s6
+	vsub.f32	s10, s11, s10
+	vmov.f32	s11, s7
+	vnmls.f32	s7, s3, s26
+	vnmls.f32	s15, s0, s24
+	vmla.f32	s0, s6, s24
+	vnmls.f32	s11, s3, s4
+	vadd.f32	s14, s18, s20
+	vadd.f32	s6, s8, s13
+	vsub.f32	s8, s13, s8
+	vadd.f32	s13, s12, s1
+	vsub.f32	s12, s12, s1
+	vsub.f32	s1, s18, s20
+	vadd.f32	s4, s9, s16
+	vsub.f32	s3, s5, s22
+	vsub.f32	s9, s9, s16
+	vadd.f32	s16, s0, s10
+	vsub.f32	s0, s10, s0
 	vmov	r1, s14
-	vadd.f32	s14, s12, s11
-	vsub.f32	s12, s11, s12
-	vadd.f32	s2, s15, s1
-	vsub.f32	s1, s15, s1
-	vmov.f32	s15, s0
-	vadd.f32	s11, s20, s7
-	vsub.f32	s7, s7, s20
-	vsub.f32	s9, s18, s16
-	vadd.f32	s16, s16, s18
-	vadd.f32	s18, s4, s22
-	vsub.f32	s4, s22, s4
-	vnmls.f32	s0, s3, s10
+	vadd.f32	s14, s22, s5
+	vadd.f32	s5, s4, s6
+	vsub.f32	s4, s4, s6
+	vadd.f32	s6, s15, s2
+	vsub.f32	s2, s2, s15
+	vadd.f32	s10, s9, s11
+	vsub.f32	s9, s9, s11
+	vadd.f32	s11, s8, s13
+	vsub.f32	s8, s13, s8
+	vadd.f32	s13, s7, s12
+	vsub.f32	s12, s12, s7
 	str	r1, [r0]
 	vmov	r1, s14
-	vnmls.f32	s15, s3, s13
 	str	r1, [r0, #4]
-	vmov	r1, s6
-	vadd.f32	s13, s8, s5
-	vsub.f32	s8, s5, s8
-	vadd.f32	s5, s9, s2
-	vadd.f32	s20, s16, s18
-	vsub.f32	s2, s2, s9
-	vsub.f32	s9, s18, s16
-	vadd.f32	s16, s15, s1
+	vmov	r1, s1
 	str	r1, [r0, #32]
-	vmov	r1, s12
+	vmov	r1, s3
 	str	r1, [r0, #36]
-	vmov	r1, s11
-	str	r1, [r0, #16]
-	vmov	r1, s13
-	str	r1, [r0, #20]
-	vmov	r1, s7
-	str	r1, [r0, #48]
-	vmov	r1, s8
-	str	r1, [r0, #52]
 	vmov	r1, s5
-	str	r1, [r0, #8]
-	vmov	r1, s20
 	str	r1, [r0, #12]
-	vmov	r1, s2
-	vadd.f32	s2, s0, s4
-	vsub.f32	s0, s4, s0
-	str	r1, [r0, #40]
-	vmov	r1, s9
+	vmov	r1, s4
 	str	r1, [r0, #44]
+	vmov	r1, s6
+	str	r1, [r0, #16]
 	vmov	r1, s16
-	str	r1, [r0, #24]
+	str	r1, [r0, #20]
 	vmov	r1, s2
-	vsub.f32	s2, s1, s15
-	str	r1, [r0, #28]
-	vmov	r1, s2
-	str	r1, [r0, #56]
+	str	r1, [r0, #48]
 	vmov	r1, s0
+	str	r1, [r0, #52]
+	vmov	r1, s10
+	str	r1, [r0, #28]
+	vmov	r1, s9
 	str	r1, [r0, #60]
+	vmov	r1, s11
+	str	r1, [r0, #8]
+	vmov	r1, s8
+	str	r1, [r0, #40]
+	vmov	r1, s13
+	str	r1, [r0, #24]
+	vmov	r1, s12
+	str	r1, [r0, #56]
+	add	sp, #8
 	vpop	{d8, d9, d10, d11, d12, d13}
-	pop	{r4, r5, r6, pc}
+	add	sp, #4
+	pop.w	{r4, r5, r6, r7, r8, r9, r10, r11, pc}
 	.p2align	2
 @ %bb.1:
 .LCPI6_0:
@@ -2452,16 +2404,15 @@ mfcc_GetInputShape:
 	cbz	r0, .LBB11_2
 @ %bb.1:                                @ %ElseBlock0
 	movs	r0, #0
-	str	r0, [r1]
 	str	r0, [r1, #4]
+	str	r0, [r1]
 	str	r0, [r1, #8]
 	bx	lr
 .LBB11_2:                               @ %ThenBlock0
-	mov.w	r2, #512
 	movs	r0, #1
-	str	r2, [r1]
-	str	r0, [r1, #4]
-	str	r0, [r1, #8]
+	mov.w	r2, #512
+	strd	r0, r0, [r1]
+	str	r2, [r1, #8]
 	bx	lr
 .Lfunc_end11:
 	.size	mfcc_GetInputShape, .Lfunc_end11-mfcc_GetInputShape
@@ -2479,7 +2430,8 @@ mfcc_GetOutputShape:
 	cbz	r0, .LBB12_2
 @ %bb.1:                                @ %ElseBlock0
 	movs	r0, #0
-	strd	r0, r0, [r1]
+	str	r0, [r1, #4]
+	str	r0, [r1]
 	str	r0, [r1, #8]
 	bx	lr
 .LBB12_2:                               @ %ThenBlock0
@@ -2503,174 +2455,417 @@ mfcc_GetMetadata:
 @ %bb.0:                                @ %entry
 	.save	{r4, r5, r6, r7, lr}
 	push	{r4, r5, r6, r7, lr}
-	ldr	r3, .LCPI13_0
+	ldr	r7, .LCPI13_0
 	mov	r1, r0
 	ldr	r0, .LCPI13_1
-	movs	r2, #0
+	movs	r3, #0
 .LPC13_0:
-	add	r3, pc
+	add	r7, pc
 .LPC13_1:
 	add	r0, pc
 .LBB13_1:                               @ %loop.body.i
                                         @ =>This Inner Loop Header: Depth=1
-	ldrb	r6, [r3, r2]
-	ldrb	r4, [r1, r2]
-	orrs.w	r5, r4, r6
-	beq	.LBB13_28
+	ldrb	r2, [r7, r3]
+	ldrb	r4, [r1, r3]
+	orrs.w	r6, r4, r2
+	beq.w	.LBB13_78
 @ %bb.2:                                @ %if.after.i
                                         @   in Loop: Header=BB13_1 Depth=1
-	cmp	r4, r6
+	cmp	r4, r2
 	bne	.LBB13_5
 @ %bb.3:                                @ %if.after.i
                                         @   in Loop: Header=BB13_1 Depth=1
-	cmp	r2, #11
+	cmp	r3, #8
 	beq	.LBB13_5
 @ %bb.4:                                @ %if.after.i
                                         @   in Loop: Header=BB13_1 Depth=1
-	adds	r2, #1
+	adds	r3, #1
 	cmp	r4, #0
 	bne	.LBB13_1
-.LBB13_5:                               @ %loop.body.i42.preheader
-	ldr	r3, .LCPI13_2
+.LBB13_5:                               @ %loop.body.i132.preheader
+	ldr	r4, .LCPI13_2
 	ldr	r0, .LCPI13_3
-	movs	r2, #0
+	movs	r3, #0
 .LPC13_2:
-	add	r3, pc
+	add	r4, pc
 .LPC13_3:
 	add	r0, pc
-.LBB13_6:                               @ %loop.body.i42
+.LBB13_6:                               @ %loop.body.i132
                                         @ =>This Inner Loop Header: Depth=1
-	ldrb	r6, [r3, r2]
-	ldrb	r4, [r1, r2]
-	orrs.w	r5, r4, r6
-	beq	.LBB13_28
-@ %bb.7:                                @ %if.after.i43
+	ldrb	r6, [r4, r3]
+	ldrb	r2, [r1, r3]
+	orrs.w	r5, r2, r6
+	beq.w	.LBB13_78
+@ %bb.7:                                @ %if.after.i133
                                         @   in Loop: Header=BB13_6 Depth=1
-	cmp	r4, r6
+	cmp	r2, r6
 	bne	.LBB13_10
-@ %bb.8:                                @ %if.after.i43
+@ %bb.8:                                @ %if.after.i133
                                         @   in Loop: Header=BB13_6 Depth=1
-	cmp	r2, #11
+	cmp	r3, #11
 	beq	.LBB13_10
-@ %bb.9:                                @ %if.after.i43
+@ %bb.9:                                @ %if.after.i133
                                         @   in Loop: Header=BB13_6 Depth=1
-	adds	r2, #1
-	cmp	r4, #0
+	adds	r3, #1
+	cmp	r2, #0
 	bne	.LBB13_6
-.LBB13_10:                              @ %loop.body.i37.preheader
-	ldr	r3, .LCPI13_4
-	ldr	r0, .LCPI13_5
-	movs	r2, #0
+.LBB13_10:                              @ %loop.body.i127.preheader
+	ldr	r0, .LCPI13_4
+	movs	r3, #0
 .LPC13_4:
-	add	r3, pc
+	add	r0, pc
+.LBB13_11:                              @ %loop.body.i127
+                                        @ =>This Inner Loop Header: Depth=1
+	ldrb	r6, [r7, r3]
+	ldrb	r2, [r1, r3]
+	orrs.w	r5, r2, r6
+	beq.w	.LBB13_78
+@ %bb.12:                               @ %if.after.i128
+                                        @   in Loop: Header=BB13_11 Depth=1
+	cmp	r2, r6
+	bne	.LBB13_15
+@ %bb.13:                               @ %if.after.i128
+                                        @   in Loop: Header=BB13_11 Depth=1
+	cmp	r3, #8
+	beq	.LBB13_15
+@ %bb.14:                               @ %if.after.i128
+                                        @   in Loop: Header=BB13_11 Depth=1
+	adds	r3, #1
+	cmp	r2, #0
+	bne	.LBB13_11
+.LBB13_15:                              @ %loop.body.i122.preheader
+	ldr	r0, .LCPI13_5
+	movs	r3, #0
 .LPC13_5:
 	add	r0, pc
-.LBB13_11:                              @ %loop.body.i37
+.LBB13_16:                              @ %loop.body.i122
                                         @ =>This Inner Loop Header: Depth=1
-	ldrb	r6, [r3, r2]
-	ldrb	r4, [r1, r2]
-	orrs.w	r5, r4, r6
-	beq	.LBB13_28
-@ %bb.12:                               @ %if.after.i38
-                                        @   in Loop: Header=BB13_11 Depth=1
-	cmp	r4, r6
-	bne	.LBB13_15
-@ %bb.13:                               @ %if.after.i38
-                                        @   in Loop: Header=BB13_11 Depth=1
-	cmp	r2, #15
-	beq	.LBB13_15
-@ %bb.14:                               @ %if.after.i38
-                                        @   in Loop: Header=BB13_11 Depth=1
-	adds	r2, #1
-	cmp	r4, #0
-	bne	.LBB13_11
-.LBB13_15:                              @ %loop.body.i32.preheader
-	ldr	r3, .LCPI13_6
-	ldr	r0, .LCPI13_7
-	movs	r2, #0
+	ldrb	r6, [r7, r3]
+	ldrb	r2, [r1, r3]
+	orrs.w	r5, r2, r6
+	beq.w	.LBB13_78
+@ %bb.17:                               @ %if.after.i123
+                                        @   in Loop: Header=BB13_16 Depth=1
+	cmp	r2, r6
+	bne	.LBB13_20
+@ %bb.18:                               @ %if.after.i123
+                                        @   in Loop: Header=BB13_16 Depth=1
+	cmp	r3, #8
+	beq	.LBB13_20
+@ %bb.19:                               @ %if.after.i123
+                                        @   in Loop: Header=BB13_16 Depth=1
+	adds	r3, #1
+	cmp	r2, #0
+	bne	.LBB13_16
+.LBB13_20:                              @ %loop.body.i117.preheader
+	ldr	r0, .LCPI13_6
+	movs	r3, #0
 .LPC13_6:
-	add	r3, pc
+	add	r0, pc
+.LBB13_21:                              @ %loop.body.i117
+                                        @ =>This Inner Loop Header: Depth=1
+	ldrb	r6, [r7, r3]
+	ldrb	r2, [r1, r3]
+	orrs.w	r5, r2, r6
+	beq.w	.LBB13_78
+@ %bb.22:                               @ %if.after.i118
+                                        @   in Loop: Header=BB13_21 Depth=1
+	cmp	r2, r6
+	bne	.LBB13_25
+@ %bb.23:                               @ %if.after.i118
+                                        @   in Loop: Header=BB13_21 Depth=1
+	cmp	r3, #8
+	beq	.LBB13_25
+@ %bb.24:                               @ %if.after.i118
+                                        @   in Loop: Header=BB13_21 Depth=1
+	adds	r3, #1
+	cmp	r2, #0
+	bne	.LBB13_21
+.LBB13_25:                              @ %loop.body.i112.preheader
+	ldr	r0, .LCPI13_7
+	movs	r3, #0
 .LPC13_7:
 	add	r0, pc
-.LBB13_16:                              @ %loop.body.i32
+.LBB13_26:                              @ %loop.body.i112
                                         @ =>This Inner Loop Header: Depth=1
-	ldrb	r6, [r3, r2]
-	ldrb	r4, [r1, r2]
-	orrs.w	r5, r4, r6
-	beq	.LBB13_28
-@ %bb.17:                               @ %if.after.i33
-                                        @   in Loop: Header=BB13_16 Depth=1
-	cmp	r4, r6
-	bne	.LBB13_20
-@ %bb.18:                               @ %if.after.i33
-                                        @   in Loop: Header=BB13_16 Depth=1
-	cmp	r2, #11
-	beq	.LBB13_20
-@ %bb.19:                               @ %if.after.i33
-                                        @   in Loop: Header=BB13_16 Depth=1
-	adds	r2, #1
-	cmp	r4, #0
-	bne	.LBB13_16
-.LBB13_20:                              @ %loop.body.i27.preheader
-	ldr	r3, .LCPI13_8
+	ldrb	r6, [r7, r3]
+	ldrb	r2, [r1, r3]
+	orrs.w	r5, r2, r6
+	beq.w	.LBB13_78
+@ %bb.27:                               @ %if.after.i113
+                                        @   in Loop: Header=BB13_26 Depth=1
+	cmp	r2, r6
+	bne	.LBB13_30
+@ %bb.28:                               @ %if.after.i113
+                                        @   in Loop: Header=BB13_26 Depth=1
+	cmp	r3, #8
+	beq	.LBB13_30
+@ %bb.29:                               @ %if.after.i113
+                                        @   in Loop: Header=BB13_26 Depth=1
+	adds	r3, #1
+	cmp	r2, #0
+	bne	.LBB13_26
+.LBB13_30:                              @ %loop.body.i107.preheader
+	ldr	r4, .LCPI13_8
 	ldr	r0, .LCPI13_9
-	movs	r2, #0
+	movs	r3, #0
 .LPC13_8:
-	add	r3, pc
+	add	r4, pc
 .LPC13_9:
 	add	r0, pc
-.LBB13_21:                              @ %loop.body.i27
+.LBB13_31:                              @ %loop.body.i107
                                         @ =>This Inner Loop Header: Depth=1
-	ldrb	r6, [r3, r2]
-	ldrb	r4, [r1, r2]
-	orrs.w	r5, r4, r6
-	beq	.LBB13_28
-@ %bb.22:                               @ %if.after.i28
-                                        @   in Loop: Header=BB13_21 Depth=1
-	cmp	r4, r6
-	bne	.LBB13_25
-@ %bb.23:                               @ %if.after.i28
-                                        @   in Loop: Header=BB13_21 Depth=1
-	cmp	r2, #15
-	beq	.LBB13_25
-@ %bb.24:                               @ %if.after.i28
-                                        @   in Loop: Header=BB13_21 Depth=1
-	adds	r2, #1
-	cmp	r4, #0
-	bne	.LBB13_21
-.LBB13_25:                              @ %loop.body.i22.preheader
+	ldrb	r6, [r4, r3]
+	ldrb	r2, [r1, r3]
+	orrs.w	r5, r2, r6
+	beq.w	.LBB13_78
+@ %bb.32:                               @ %if.after.i108
+                                        @   in Loop: Header=BB13_31 Depth=1
+	cmp	r2, r6
+	bne	.LBB13_35
+@ %bb.33:                               @ %if.after.i108
+                                        @   in Loop: Header=BB13_31 Depth=1
+	cmp	r3, #11
+	beq	.LBB13_35
+@ %bb.34:                               @ %if.after.i108
+                                        @   in Loop: Header=BB13_31 Depth=1
+	adds	r3, #1
+	cmp	r2, #0
+	bne	.LBB13_31
+.LBB13_35:                              @ %loop.body.i102.preheader
 	ldr	r4, .LCPI13_10
-	ldr	r7, .LCPI13_11
-	ldr	r0, .LCPI13_12
-	movs	r2, #0
+	ldr	r0, .LCPI13_11
+	movs	r3, #0
 .LPC13_10:
 	add	r4, pc
 .LPC13_11:
-	add	r7, pc
-.LPC13_12:
 	add	r0, pc
-.LBB13_26:                              @ %loop.body.i22
+.LBB13_36:                              @ %loop.body.i102
                                         @ =>This Inner Loop Header: Depth=1
-	ldrb	r5, [r4, r2]
-	ldrb	r3, [r1, r2]
-	orrs.w	r6, r3, r5
+	ldrb	r6, [r4, r3]
+	ldrb	r2, [r1, r3]
+	orrs.w	r5, r2, r6
+	beq.w	.LBB13_78
+@ %bb.37:                               @ %if.after.i103
+                                        @   in Loop: Header=BB13_36 Depth=1
+	cmp	r2, r6
+	bne	.LBB13_40
+@ %bb.38:                               @ %if.after.i103
+                                        @   in Loop: Header=BB13_36 Depth=1
+	cmp	r3, #11
+	beq	.LBB13_40
+@ %bb.39:                               @ %if.after.i103
+                                        @   in Loop: Header=BB13_36 Depth=1
+	adds	r3, #1
+	cmp	r2, #0
+	bne	.LBB13_36
+.LBB13_40:                              @ %loop.body.i97.preheader
+	ldr	r4, .LCPI13_12
+	ldr	r0, .LCPI13_13
+	movs	r3, #0
+.LPC13_12:
+	add	r4, pc
+.LPC13_13:
+	add	r0, pc
+.LBB13_41:                              @ %loop.body.i97
+                                        @ =>This Inner Loop Header: Depth=1
+	ldrb	r6, [r4, r3]
+	ldrb	r2, [r1, r3]
+	orrs.w	r5, r2, r6
+	beq	.LBB13_78
+@ %bb.42:                               @ %if.after.i98
+                                        @   in Loop: Header=BB13_41 Depth=1
+	cmp	r2, r6
+	bne	.LBB13_45
+@ %bb.43:                               @ %if.after.i98
+                                        @   in Loop: Header=BB13_41 Depth=1
+	cmp	r3, #15
+	beq	.LBB13_45
+@ %bb.44:                               @ %if.after.i98
+                                        @   in Loop: Header=BB13_41 Depth=1
+	adds	r3, #1
+	cmp	r2, #0
+	bne	.LBB13_41
+.LBB13_45:                              @ %loop.body.i92.preheader
+	ldr	r4, .LCPI13_14
+	ldr	r0, .LCPI13_15
+	movs	r3, #0
+.LPC13_14:
+	add	r4, pc
+.LPC13_15:
+	add	r0, pc
+.LBB13_46:                              @ %loop.body.i92
+                                        @ =>This Inner Loop Header: Depth=1
+	ldrb	r6, [r4, r3]
+	ldrb	r2, [r1, r3]
+	orrs.w	r5, r2, r6
+	beq	.LBB13_78
+@ %bb.47:                               @ %if.after.i93
+                                        @   in Loop: Header=BB13_46 Depth=1
+	cmp	r2, r6
+	bne	.LBB13_50
+@ %bb.48:                               @ %if.after.i93
+                                        @   in Loop: Header=BB13_46 Depth=1
+	cmp	r3, #15
+	beq	.LBB13_50
+@ %bb.49:                               @ %if.after.i93
+                                        @   in Loop: Header=BB13_46 Depth=1
+	adds	r3, #1
+	cmp	r2, #0
+	bne	.LBB13_46
+.LBB13_50:                              @ %loop.body.i87.preheader
+	ldr	r0, .LCPI13_16
+	movs	r3, #0
+.LPC13_16:
+	add	r0, pc
+.LBB13_51:                              @ %loop.body.i87
+                                        @ =>This Inner Loop Header: Depth=1
+	ldrb	r6, [r7, r3]
+	ldrb	r2, [r1, r3]
+	orrs.w	r5, r2, r6
+	beq	.LBB13_78
+@ %bb.52:                               @ %if.after.i88
+                                        @   in Loop: Header=BB13_51 Depth=1
+	cmp	r2, r6
+	bne	.LBB13_55
+@ %bb.53:                               @ %if.after.i88
+                                        @   in Loop: Header=BB13_51 Depth=1
+	cmp	r3, #8
+	beq	.LBB13_55
+@ %bb.54:                               @ %if.after.i88
+                                        @   in Loop: Header=BB13_51 Depth=1
+	adds	r3, #1
+	cmp	r2, #0
+	bne	.LBB13_51
+.LBB13_55:                              @ %loop.body.i82.preheader
+	ldr	r0, .LCPI13_17
+	movs	r3, #0
+.LPC13_17:
+	add	r0, pc
+.LBB13_56:                              @ %loop.body.i82
+                                        @ =>This Inner Loop Header: Depth=1
+	ldrb	r6, [r7, r3]
+	ldrb	r2, [r1, r3]
+	orrs.w	r5, r2, r6
+	beq	.LBB13_78
+@ %bb.57:                               @ %if.after.i83
+                                        @   in Loop: Header=BB13_56 Depth=1
+	cmp	r2, r6
+	bne	.LBB13_60
+@ %bb.58:                               @ %if.after.i83
+                                        @   in Loop: Header=BB13_56 Depth=1
+	cmp	r3, #8
+	beq	.LBB13_60
+@ %bb.59:                               @ %if.after.i83
+                                        @   in Loop: Header=BB13_56 Depth=1
+	adds	r3, #1
+	cmp	r2, #0
+	bne	.LBB13_56
+.LBB13_60:                              @ %loop.body.i77.preheader
+	ldr	r0, .LCPI13_18
+	movs	r3, #0
+.LPC13_18:
+	add	r0, pc
+.LBB13_61:                              @ %loop.body.i77
+                                        @ =>This Inner Loop Header: Depth=1
+	ldrb	r6, [r7, r3]
+	ldrb	r2, [r1, r3]
+	orrs.w	r5, r2, r6
+	beq	.LBB13_78
+@ %bb.62:                               @ %if.after.i78
+                                        @   in Loop: Header=BB13_61 Depth=1
+	cmp	r2, r6
+	bne	.LBB13_65
+@ %bb.63:                               @ %if.after.i78
+                                        @   in Loop: Header=BB13_61 Depth=1
+	cmp	r3, #8
+	beq	.LBB13_65
+@ %bb.64:                               @ %if.after.i78
+                                        @   in Loop: Header=BB13_61 Depth=1
+	adds	r3, #1
+	cmp	r2, #0
+	bne	.LBB13_61
+.LBB13_65:                              @ %loop.body.i72.preheader
+	ldr	r4, .LCPI13_19
+	ldr	r0, .LCPI13_20
+	movs	r3, #0
+.LPC13_19:
+	add	r4, pc
+.LPC13_20:
+	add	r0, pc
+.LBB13_66:                              @ %loop.body.i72
+                                        @ =>This Inner Loop Header: Depth=1
+	ldrb	r6, [r4, r3]
+	ldrb	r2, [r1, r3]
+	orrs.w	r5, r2, r6
+	beq	.LBB13_78
+@ %bb.67:                               @ %if.after.i73
+                                        @   in Loop: Header=BB13_66 Depth=1
+	cmp	r2, r6
+	bne	.LBB13_70
+@ %bb.68:                               @ %if.after.i73
+                                        @   in Loop: Header=BB13_66 Depth=1
+	cmp	r3, #3
+	beq	.LBB13_70
+@ %bb.69:                               @ %if.after.i73
+                                        @   in Loop: Header=BB13_66 Depth=1
+	adds	r3, #1
+	cmp	r2, #0
+	bne	.LBB13_66
+.LBB13_70:                              @ %loop.body.i67.preheader
+	ldr	r0, .LCPI13_21
+	movs	r3, #0
+.LPC13_21:
+	add	r0, pc
+.LBB13_71:                              @ %loop.body.i67
+                                        @ =>This Inner Loop Header: Depth=1
+	ldrb	r6, [r7, r3]
+	ldrb	r2, [r1, r3]
+	orrs.w	r5, r2, r6
+	beq	.LBB13_78
+@ %bb.72:                               @ %if.after.i68
+                                        @   in Loop: Header=BB13_71 Depth=1
+	cmp	r2, r6
+	bne	.LBB13_75
+@ %bb.73:                               @ %if.after.i68
+                                        @   in Loop: Header=BB13_71 Depth=1
+	cmp	r3, #8
+	beq	.LBB13_75
+@ %bb.74:                               @ %if.after.i68
+                                        @   in Loop: Header=BB13_71 Depth=1
+	adds	r3, #1
+	cmp	r2, #0
+	bne	.LBB13_71
+.LBB13_75:                              @ %loop.body.i62.preheader
+	ldr	r6, .LCPI13_22
+	ldr	r0, .LCPI13_23
+	movs	r3, #0
+.LPC13_22:
+	add	r6, pc
+.LPC13_23:
+	add	r0, pc
+.LBB13_76:                              @ %loop.body.i62
+                                        @ =>This Inner Loop Header: Depth=1
+	ldrb	r4, [r7, r3]
+	ldrb	r2, [r1, r3]
+	orrs.w	r5, r2, r4
 	itt	eq
-	moveq	r0, r7
+	moveq	r0, r6
 	popeq	{r4, r5, r6, r7, pc}
-	cmp	r3, r5
-	bne	.LBB13_28
-@ %bb.27:                               @ %if.after.i23
-                                        @   in Loop: Header=BB13_26 Depth=1
-	cmp	r2, #3
+	cmp	r2, r4
+	bne	.LBB13_78
+@ %bb.77:                               @ %if.after.i63
+                                        @   in Loop: Header=BB13_76 Depth=1
+	cmp	r3, #8
 	it	eq
 	popeq	{r4, r5, r6, r7, pc}
-	adds	r2, #1
-	cmp	r3, #0
-	bne	.LBB13_26
-.LBB13_28:                              @ %NoMatchBlock
+	adds	r3, #1
+	cmp	r2, #0
+	bne	.LBB13_76
+.LBB13_78:                              @ %NoMatchBlock
 	pop	{r4, r5, r6, r7, pc}
 	.p2align	2
-@ %bb.29:
+@ %bb.79:
 .LCPI13_0:
 	.long	.L__unnamed_1-(.LPC13_0+4)
 .LCPI13_1:
@@ -2684,9 +2879,9 @@ mfcc_GetMetadata:
 .LCPI13_5:
 	.long	.L__unnamed_6-(.LPC13_5+4)
 .LCPI13_6:
-	.long	.L__unnamed_7-(.LPC13_6+4)
+	.long	.L__unnamed_6-(.LPC13_6+4)
 .LCPI13_7:
-	.long	.L__unnamed_6-(.LPC13_7+4)
+	.long	.L__unnamed_7-(.LPC13_7+4)
 .LCPI13_8:
 	.long	.L__unnamed_8-(.LPC13_8+4)
 .LCPI13_9:
@@ -2697,6 +2892,28 @@ mfcc_GetMetadata:
 	.long	.L__unnamed_11-(.LPC13_11+4)
 .LCPI13_12:
 	.long	.L__unnamed_12-(.LPC13_12+4)
+.LCPI13_13:
+	.long	.L__unnamed_11-(.LPC13_13+4)
+.LCPI13_14:
+	.long	.L__unnamed_13-(.LPC13_14+4)
+.LCPI13_15:
+	.long	.L__unnamed_14-(.LPC13_15+4)
+.LCPI13_16:
+	.long	.L__unnamed_15-(.LPC13_16+4)
+.LCPI13_17:
+	.long	.L__unnamed_16-(.LPC13_17+4)
+.LCPI13_18:
+	.long	.L__unnamed_17-(.LPC13_18+4)
+.LCPI13_19:
+	.long	.L__unnamed_18-(.LPC13_19+4)
+.LCPI13_20:
+	.long	.L__unnamed_19-(.LPC13_20+4)
+.LCPI13_21:
+	.long	.L__unnamed_20-(.LPC13_21+4)
+.LCPI13_22:
+	.long	.L__unnamed_21-(.LPC13_22+4)
+.LCPI13_23:
+	.long	.L__unnamed_22-(.LPC13_23+4)
 .Lfunc_end13:
 	.size	mfcc_GetMetadata, .Lfunc_end13-mfcc_GetMetadata
 	.cantunwind
@@ -2705,9 +2922,6 @@ mfcc_GetMetadata:
 	.type	mfcc_context,%object    @ @mfcc_context
 	.local	mfcc_context
 	.comm	mfcc_context,4,4
-	.type	g_0,%object             @ @g_0
-	.local	g_0
-	.comm	g_0,2048,16
 	.type	g_1,%object             @ @g_1
 	.local	g_1
 	.comm	g_1,2048,16
@@ -4252,260 +4466,260 @@ twiddles_256:
 	.type	g_3,%object             @ @g_3
 	.local	g_3
 	.comm	g_3,1024,16
-	.type	filterStart_Node_1150,%object @ @filterStart_Node_1150
+	.type	filterStart_Node_1079,%object @ @filterStart_Node_1079
 	.p2align	4
-filterStart_Node_1150:
+filterStart_Node_1079:
 	.long	0                       @ 0x0
 	.long	0                       @ 0x0
-	.long	0                       @ 0x0
-	.long	1                       @ 0x1
-	.long	1                       @ 0x1
 	.long	1                       @ 0x1
 	.long	2                       @ 0x2
 	.long	2                       @ 0x2
 	.long	3                       @ 0x3
-	.long	3                       @ 0x3
-	.long	4                       @ 0x4
 	.long	4                       @ 0x4
 	.long	5                       @ 0x5
-	.long	5                       @ 0x5
 	.long	6                       @ 0x6
-	.long	6                       @ 0x6
-	.long	7                       @ 0x7
 	.long	7                       @ 0x7
 	.long	8                       @ 0x8
 	.long	9                       @ 0x9
-	.long	9                       @ 0x9
 	.long	10                      @ 0xa
-	.long	11                      @ 0xb
 	.long	11                      @ 0xb
 	.long	12                      @ 0xc
 	.long	13                      @ 0xd
 	.long	14                      @ 0xe
-	.long	14                      @ 0xe
 	.long	15                      @ 0xf
 	.long	16                      @ 0x10
-	.long	17                      @ 0x11
 	.long	18                      @ 0x12
 	.long	19                      @ 0x13
 	.long	20                      @ 0x14
-	.long	21                      @ 0x15
 	.long	22                      @ 0x16
 	.long	23                      @ 0x17
 	.long	24                      @ 0x18
-	.long	25                      @ 0x19
 	.long	26                      @ 0x1a
 	.long	27                      @ 0x1b
 	.long	29                      @ 0x1d
-	.long	30                      @ 0x1e
 	.long	31                      @ 0x1f
 	.long	32                      @ 0x20
 	.long	34                      @ 0x22
-	.long	35                      @ 0x23
-	.long	37                      @ 0x25
+	.long	36                      @ 0x24
 	.long	38                      @ 0x26
 	.long	40                      @ 0x28
 	.long	42                      @ 0x2a
-	.long	43                      @ 0x2b
-	.long	45                      @ 0x2d
-	.long	47                      @ 0x2f
-	.long	49                      @ 0x31
+	.long	44                      @ 0x2c
+	.long	46                      @ 0x2e
+	.long	48                      @ 0x30
 	.long	50                      @ 0x32
-	.long	52                      @ 0x34
-	.long	54                      @ 0x36
+	.long	53                      @ 0x35
+	.long	55                      @ 0x37
 	.long	57                      @ 0x39
-	.long	59                      @ 0x3b
-	.long	61                      @ 0x3d
+	.long	60                      @ 0x3c
 	.long	63                      @ 0x3f
-	.long	66                      @ 0x42
+	.long	65                      @ 0x41
 	.long	68                      @ 0x44
 	.long	71                      @ 0x47
-	.long	73                      @ 0x49
-	.long	76                      @ 0x4c
-	.long	79                      @ 0x4f
-	.long	82                      @ 0x52
-	.long	84                      @ 0x54
-	.long	88                      @ 0x58
-	.long	91                      @ 0x5b
+	.long	74                      @ 0x4a
+	.long	77                      @ 0x4d
+	.long	80                      @ 0x50
+	.long	83                      @ 0x53
+	.long	87                      @ 0x57
+	.long	90                      @ 0x5a
 	.long	94                      @ 0x5e
 	.long	97                      @ 0x61
 	.long	101                     @ 0x65
-	.long	104                     @ 0x68
-	.long	108                     @ 0x6c
-	.long	112                     @ 0x70
-	.long	116                     @ 0x74
-	.long	120                     @ 0x78
-	.size	filterStart_Node_1150, 320
+	.long	105                     @ 0x69
+	.long	109                     @ 0x6d
+	.long	113                     @ 0x71
+	.long	118                     @ 0x76
+	.long	122                     @ 0x7a
+	.long	127                     @ 0x7f
+	.long	132                     @ 0x84
+	.long	136                     @ 0x88
+	.long	141                     @ 0x8d
+	.long	147                     @ 0x93
+	.long	152                     @ 0x98
+	.long	158                     @ 0x9e
+	.long	163                     @ 0xa3
+	.long	169                     @ 0xa9
+	.long	175                     @ 0xaf
+	.long	181                     @ 0xb5
+	.long	188                     @ 0xbc
+	.long	195                     @ 0xc3
+	.long	201                     @ 0xc9
+	.long	209                     @ 0xd1
+	.long	216                     @ 0xd8
+	.long	223                     @ 0xdf
+	.long	231                     @ 0xe7
+	.long	239                     @ 0xef
+	.size	filterStart_Node_1079, 320
 
-	.type	filterCenter_Node_1150,%object @ @filterCenter_Node_1150
+	.type	filterCenter_Node_1079,%object @ @filterCenter_Node_1079
 	.p2align	4
-filterCenter_Node_1150:
+filterCenter_Node_1079:
 	.long	0                       @ 0x0
-	.long	0                       @ 0x0
-	.long	1                       @ 0x1
-	.long	1                       @ 0x1
 	.long	1                       @ 0x1
 	.long	2                       @ 0x2
 	.long	2                       @ 0x2
 	.long	3                       @ 0x3
-	.long	3                       @ 0x3
-	.long	4                       @ 0x4
 	.long	4                       @ 0x4
 	.long	5                       @ 0x5
-	.long	5                       @ 0x5
 	.long	6                       @ 0x6
-	.long	6                       @ 0x6
-	.long	7                       @ 0x7
 	.long	7                       @ 0x7
 	.long	8                       @ 0x8
 	.long	9                       @ 0x9
-	.long	9                       @ 0x9
 	.long	10                      @ 0xa
-	.long	11                      @ 0xb
 	.long	11                      @ 0xb
 	.long	12                      @ 0xc
 	.long	13                      @ 0xd
 	.long	14                      @ 0xe
-	.long	14                      @ 0xe
 	.long	15                      @ 0xf
 	.long	16                      @ 0x10
-	.long	17                      @ 0x11
 	.long	18                      @ 0x12
 	.long	19                      @ 0x13
 	.long	20                      @ 0x14
-	.long	21                      @ 0x15
 	.long	22                      @ 0x16
 	.long	23                      @ 0x17
 	.long	24                      @ 0x18
-	.long	25                      @ 0x19
 	.long	26                      @ 0x1a
 	.long	27                      @ 0x1b
 	.long	29                      @ 0x1d
-	.long	30                      @ 0x1e
 	.long	31                      @ 0x1f
 	.long	32                      @ 0x20
 	.long	34                      @ 0x22
-	.long	35                      @ 0x23
-	.long	37                      @ 0x25
+	.long	36                      @ 0x24
 	.long	38                      @ 0x26
 	.long	40                      @ 0x28
 	.long	42                      @ 0x2a
-	.long	43                      @ 0x2b
-	.long	45                      @ 0x2d
-	.long	47                      @ 0x2f
-	.long	49                      @ 0x31
+	.long	44                      @ 0x2c
+	.long	46                      @ 0x2e
+	.long	48                      @ 0x30
 	.long	50                      @ 0x32
-	.long	52                      @ 0x34
-	.long	54                      @ 0x36
+	.long	53                      @ 0x35
+	.long	55                      @ 0x37
 	.long	57                      @ 0x39
-	.long	59                      @ 0x3b
-	.long	61                      @ 0x3d
+	.long	60                      @ 0x3c
 	.long	63                      @ 0x3f
-	.long	66                      @ 0x42
+	.long	65                      @ 0x41
 	.long	68                      @ 0x44
 	.long	71                      @ 0x47
-	.long	73                      @ 0x49
-	.long	76                      @ 0x4c
-	.long	79                      @ 0x4f
-	.long	82                      @ 0x52
-	.long	84                      @ 0x54
-	.long	88                      @ 0x58
-	.long	91                      @ 0x5b
+	.long	74                      @ 0x4a
+	.long	77                      @ 0x4d
+	.long	80                      @ 0x50
+	.long	83                      @ 0x53
+	.long	87                      @ 0x57
+	.long	90                      @ 0x5a
 	.long	94                      @ 0x5e
 	.long	97                      @ 0x61
 	.long	101                     @ 0x65
-	.long	104                     @ 0x68
-	.long	108                     @ 0x6c
-	.long	112                     @ 0x70
-	.long	116                     @ 0x74
-	.long	120                     @ 0x78
-	.long	124                     @ 0x7c
-	.size	filterCenter_Node_1150, 320
+	.long	105                     @ 0x69
+	.long	109                     @ 0x6d
+	.long	113                     @ 0x71
+	.long	118                     @ 0x76
+	.long	122                     @ 0x7a
+	.long	127                     @ 0x7f
+	.long	132                     @ 0x84
+	.long	136                     @ 0x88
+	.long	141                     @ 0x8d
+	.long	147                     @ 0x93
+	.long	152                     @ 0x98
+	.long	158                     @ 0x9e
+	.long	163                     @ 0xa3
+	.long	169                     @ 0xa9
+	.long	175                     @ 0xaf
+	.long	181                     @ 0xb5
+	.long	188                     @ 0xbc
+	.long	195                     @ 0xc3
+	.long	201                     @ 0xc9
+	.long	209                     @ 0xd1
+	.long	216                     @ 0xd8
+	.long	223                     @ 0xdf
+	.long	231                     @ 0xe7
+	.long	239                     @ 0xef
+	.long	247                     @ 0xf7
+	.size	filterCenter_Node_1079, 320
 
-	.type	filterEnd_Node_1150,%object @ @filterEnd_Node_1150
+	.type	filterEnd_Node_1079,%object @ @filterEnd_Node_1079
 	.p2align	4
-filterEnd_Node_1150:
-	.long	0                       @ 0x0
-	.long	1                       @ 0x1
-	.long	1                       @ 0x1
+filterEnd_Node_1079:
 	.long	1                       @ 0x1
 	.long	2                       @ 0x2
 	.long	2                       @ 0x2
 	.long	3                       @ 0x3
-	.long	3                       @ 0x3
-	.long	4                       @ 0x4
 	.long	4                       @ 0x4
 	.long	5                       @ 0x5
-	.long	5                       @ 0x5
 	.long	6                       @ 0x6
-	.long	6                       @ 0x6
-	.long	7                       @ 0x7
 	.long	7                       @ 0x7
 	.long	8                       @ 0x8
 	.long	9                       @ 0x9
-	.long	9                       @ 0x9
 	.long	10                      @ 0xa
-	.long	11                      @ 0xb
 	.long	11                      @ 0xb
 	.long	12                      @ 0xc
 	.long	13                      @ 0xd
 	.long	14                      @ 0xe
-	.long	14                      @ 0xe
 	.long	15                      @ 0xf
 	.long	16                      @ 0x10
-	.long	17                      @ 0x11
 	.long	18                      @ 0x12
 	.long	19                      @ 0x13
 	.long	20                      @ 0x14
-	.long	21                      @ 0x15
 	.long	22                      @ 0x16
 	.long	23                      @ 0x17
 	.long	24                      @ 0x18
-	.long	25                      @ 0x19
 	.long	26                      @ 0x1a
 	.long	27                      @ 0x1b
 	.long	29                      @ 0x1d
-	.long	30                      @ 0x1e
 	.long	31                      @ 0x1f
 	.long	32                      @ 0x20
 	.long	34                      @ 0x22
-	.long	35                      @ 0x23
-	.long	37                      @ 0x25
+	.long	36                      @ 0x24
 	.long	38                      @ 0x26
 	.long	40                      @ 0x28
 	.long	42                      @ 0x2a
-	.long	43                      @ 0x2b
-	.long	45                      @ 0x2d
-	.long	47                      @ 0x2f
-	.long	49                      @ 0x31
+	.long	44                      @ 0x2c
+	.long	46                      @ 0x2e
+	.long	48                      @ 0x30
 	.long	50                      @ 0x32
-	.long	52                      @ 0x34
-	.long	54                      @ 0x36
+	.long	53                      @ 0x35
+	.long	55                      @ 0x37
 	.long	57                      @ 0x39
-	.long	59                      @ 0x3b
-	.long	61                      @ 0x3d
+	.long	60                      @ 0x3c
 	.long	63                      @ 0x3f
-	.long	66                      @ 0x42
+	.long	65                      @ 0x41
 	.long	68                      @ 0x44
 	.long	71                      @ 0x47
-	.long	73                      @ 0x49
-	.long	76                      @ 0x4c
-	.long	79                      @ 0x4f
-	.long	82                      @ 0x52
-	.long	84                      @ 0x54
-	.long	88                      @ 0x58
-	.long	91                      @ 0x5b
+	.long	74                      @ 0x4a
+	.long	77                      @ 0x4d
+	.long	80                      @ 0x50
+	.long	83                      @ 0x53
+	.long	87                      @ 0x57
+	.long	90                      @ 0x5a
 	.long	94                      @ 0x5e
 	.long	97                      @ 0x61
 	.long	101                     @ 0x65
-	.long	104                     @ 0x68
-	.long	108                     @ 0x6c
-	.long	112                     @ 0x70
-	.long	116                     @ 0x74
-	.long	120                     @ 0x78
-	.long	124                     @ 0x7c
-	.long	128                     @ 0x80
-	.size	filterEnd_Node_1150, 320
+	.long	105                     @ 0x69
+	.long	109                     @ 0x6d
+	.long	113                     @ 0x71
+	.long	118                     @ 0x76
+	.long	122                     @ 0x7a
+	.long	127                     @ 0x7f
+	.long	132                     @ 0x84
+	.long	136                     @ 0x88
+	.long	141                     @ 0x8d
+	.long	147                     @ 0x93
+	.long	152                     @ 0x98
+	.long	158                     @ 0x9e
+	.long	163                     @ 0xa3
+	.long	169                     @ 0xa9
+	.long	175                     @ 0xaf
+	.long	181                     @ 0xb5
+	.long	188                     @ 0xbc
+	.long	195                     @ 0xc3
+	.long	201                     @ 0xc9
+	.long	209                     @ 0xd1
+	.long	216                     @ 0xd8
+	.long	223                     @ 0xdf
+	.long	231                     @ 0xe7
+	.long	239                     @ 0xef
+	.long	247                     @ 0xf7
+	.long	256                     @ 0x100
+	.size	filterEnd_Node_1079, 320
 
 	.type	g_4,%object             @ @g_4
 	.local	g_4
@@ -4601,66 +4815,116 @@ c_1:
 	.type	g_6,%object             @ @g_6
 	.local	g_6
 	.comm	g_6,320,16
-	.type	.L__unnamed_12,%object  @ @0
+	.type	.L__unnamed_22,%object  @ @0
 	.section	.rodata.str1.1,"aMS",%progbits,1
-.L__unnamed_12:
+.L__unnamed_22:
 	.zero	1
-	.size	.L__unnamed_12, 1
+	.size	.L__unnamed_22, 1
 
 	.type	.L__unnamed_2,%object   @ @1
 .L__unnamed_2:
-	.asciz	"512"
-	.size	.L__unnamed_2, 4
+	.asciz	"1000"
+	.size	.L__unnamed_2, 5
 
 	.type	.L__unnamed_1,%object   @ @2
 .L__unnamed_1:
-	.asciz	"window_size"
-	.size	.L__unnamed_1, 12
+	.asciz	"ancestor"
+	.size	.L__unnamed_1, 9
 
 	.type	.L__unnamed_4,%object   @ @3
 .L__unnamed_4:
-	.asciz	"16000"
-	.size	.L__unnamed_4, 6
+	.asciz	"512"
+	.size	.L__unnamed_4, 4
 
 	.type	.L__unnamed_3,%object   @ @4
 .L__unnamed_3:
-	.asciz	"sample_rate"
+	.asciz	"window_size"
 	.size	.L__unnamed_3, 12
 
-	.type	.L__unnamed_6,%object   @ @5
-.L__unnamed_6:
-	.asciz	"80"
-	.size	.L__unnamed_6, 3
-
-	.type	.L__unnamed_5,%object   @ @6
+	.type	.L__unnamed_5,%object   @ @5
 .L__unnamed_5:
-	.asciz	"filterbank_size"
-	.size	.L__unnamed_5, 16
+	.asciz	"1001"
+	.size	.L__unnamed_5, 5
+
+	.type	.L__unnamed_6,%object   @ @6
+.L__unnamed_6:
+	.asciz	"1002"
+	.size	.L__unnamed_6, 5
 
 	.type	.L__unnamed_7,%object   @ @7
 .L__unnamed_7:
-	.asciz	"num_filters"
-	.size	.L__unnamed_7, 12
+	.asciz	"1003"
+	.size	.L__unnamed_7, 5
 
 	.type	.L__unnamed_9,%object   @ @8
 .L__unnamed_9:
-	.asciz	"mel"
-	.size	.L__unnamed_9, 4
+	.asciz	"16000"
+	.size	.L__unnamed_9, 6
 
 	.type	.L__unnamed_8,%object   @ @9
 .L__unnamed_8:
-	.asciz	"filterbank_type"
-	.size	.L__unnamed_8, 16
+	.asciz	"sample_rate"
+	.size	.L__unnamed_8, 12
 
 	.type	.L__unnamed_11,%object  @ @10
 .L__unnamed_11:
-	.asciz	"true"
-	.size	.L__unnamed_11, 5
+	.asciz	"80"
+	.size	.L__unnamed_11, 3
 
 	.type	.L__unnamed_10,%object  @ @11
 .L__unnamed_10:
+	.asciz	"num_filters"
+	.size	.L__unnamed_10, 12
+
+	.type	.L__unnamed_12,%object  @ @12
+.L__unnamed_12:
+	.asciz	"filterbank_size"
+	.size	.L__unnamed_12, 16
+
+	.type	.L__unnamed_14,%object  @ @13
+.L__unnamed_14:
+	.asciz	"mel"
+	.size	.L__unnamed_14, 4
+
+	.type	.L__unnamed_13,%object  @ @14
+.L__unnamed_13:
+	.asciz	"filterbank_type"
+	.size	.L__unnamed_13, 16
+
+	.type	.L__unnamed_15,%object  @ @15
+.L__unnamed_15:
+	.asciz	"1004"
+	.size	.L__unnamed_15, 5
+
+	.type	.L__unnamed_16,%object  @ @16
+.L__unnamed_16:
+	.asciz	"1005"
+	.size	.L__unnamed_16, 5
+
+	.type	.L__unnamed_17,%object  @ @17
+.L__unnamed_17:
+	.asciz	"1006"
+	.size	.L__unnamed_17, 5
+
+	.type	.L__unnamed_19,%object  @ @18
+.L__unnamed_19:
+	.asciz	"true"
+	.size	.L__unnamed_19, 5
+
+	.type	.L__unnamed_18,%object  @ @19
+.L__unnamed_18:
 	.asciz	"log"
-	.size	.L__unnamed_10, 4
+	.size	.L__unnamed_18, 4
+
+	.type	.L__unnamed_20,%object  @ @20
+.L__unnamed_20:
+	.asciz	"1007"
+	.size	.L__unnamed_20, 5
+
+	.type	.L__unnamed_21,%object  @ @21
+.L__unnamed_21:
+	.asciz	"1008"
+	.size	.L__unnamed_21, 5
 
 
 	.section	".note.GNU-stack","",%progbits

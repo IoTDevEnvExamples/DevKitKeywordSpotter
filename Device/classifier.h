@@ -1,5 +1,6 @@
 //
 // ELL header for module model
+// Compiled from input model classifier.ell
 //
 
 #pragma once
@@ -11,7 +12,6 @@ extern "C"
 {
 #endif // defined(__cplusplus)
 
-#if !defined(SWIG)
 //
 // Types
 //
@@ -28,15 +28,13 @@ typedef struct TensorShape
 
 #endif // !defined(ELL_TensorShape)
 
-#endif // !defined(SWIG)
-
 //
 // Functions
 //
 
-// Input size: 80
-// Output size: 31
-void model_Predict(void* context, float* input0, float* output0);
+// Input 0 ('32') size: 80
+// Output 0 ('output') size: 31
+void model_Predict(void* context, float* input, float* output);
 
 void model_Reset();
 
@@ -112,7 +110,7 @@ class ModelWrapper
 public:
     ModelWrapper()
     {
-        _output0.resize(GetOutputSize(0));
+        _predict_output.resize(GetOutputSize(0));
 
     }
 
@@ -170,28 +168,28 @@ public:
         return model_GetSinkOutputSize(index);
     }
 
-    void Internal_VadCallback(int* buffer)
+    void Internal_VadCallback(int32_t* buffer)
     {
         int32_t size = GetSinkOutputSize(0);
-        _sinkOutput0.assign(buffer, buffer + size);
-        VadCallback(_sinkOutput0);
+        _model_VadCallback_output.assign(buffer, buffer + size);
+        VadCallback(_model_VadCallback_output);
     }
 
-    virtual void VadCallback(std::vector<int>& sinkOutput0)
+    virtual void VadCallback(std::vector<int32_t>& output)
     {
         // override this method to get the sink callback data as a vector
     }
 
-    std::vector<float>& Predict(std::vector<float>& input0)
+    std::vector<float>& Predict(std::vector<float>& input)
     {
-        model_Predict(this, input0.data(), _output0.data());
-        return _output0;
+        model_Predict(this, input.data(), _predict_output.data());
+        return _predict_output;
     }
 
 
 private:
-    std::vector<float> _output0;
-    std::vector<int> _sinkOutput0;
+    std::vector<float> _predict_output;
+    std::vector<int32_t> _model_VadCallback_output;
       
 };
 
@@ -201,12 +199,12 @@ private:
 
 extern "C"
 {
-    void model_VadCallback(void* context, int* sinkOutput0)
+    void model_VadCallback(void* context, int32_t* output)
     {
         if (context != nullptr)
         {
             auto predictor = reinterpret_cast<ModelWrapper*>(context);
-            predictor->Internal_VadCallback(sinkOutput0);
+            predictor->Internal_VadCallback(output);
         }
     }
 

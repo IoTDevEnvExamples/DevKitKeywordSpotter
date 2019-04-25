@@ -1,5 +1,7 @@
 {
     "board": "AZ3166:stm32f4:MXCHIP_AZ3166",
     "configuration": "upload_method=OpenOCDMethod",
-    "sketch": "KeywordSpotter.ino"
+    "sketch": "KeywordSpotter.ino",
+    "output": "./build",
+    "port": "COM4"
 }

@@ -1,5 +1,6 @@
 //
 // ELL header for module mfcc
+// Compiled from input model featurizer.ell
 //
 
 #pragma once
@@ -11,7 +12,6 @@ extern "C"
 {
 #endif // defined(__cplusplus)
 
-#if !defined(SWIG)
 //
 // Types
 //
@@ -28,15 +28,13 @@ typedef struct TensorShape
 
 #endif // !defined(ELL_TensorShape)
 
-#endif // !defined(SWIG)
-
 //
 // Functions
 //
 
-// Input size: 512
-// Output size: 80
-void mfcc_Filter(void* context, float* input0, float* output0);
+// Input 0 ('input') size: 512
+// Output 0 ('output') size: 80
+void mfcc_Filter(void* context, float* input, float* output);
 
 void mfcc_Reset();
 
@@ -108,7 +106,7 @@ class MfccWrapper
 public:
     MfccWrapper()
     {
-        _output0.resize(GetOutputSize(0));
+        _predict_output.resize(GetOutputSize(0));
 
     }
 
@@ -154,15 +152,15 @@ public:
         return mfcc_GetMetadata((char*)name);
     }
 
-    std::vector<float>& Filter(std::vector<float>& input0)
+    std::vector<float>& Filter(std::vector<float>& input)
     {
-        mfcc_Filter(this, input0.data(), _output0.data());
-        return _output0;
+        mfcc_Filter(this, input.data(), _predict_output.data());
+        return _predict_output;
     }
 
 
 private:
-    std::vector<float> _output0;
+    std::vector<float> _predict_output;
       
 };
 
