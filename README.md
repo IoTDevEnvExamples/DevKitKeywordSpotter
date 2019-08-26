@@ -68,7 +68,7 @@ After app initialization, your DevKit will immediately start listening for spoke
 
     bed, bird, cat, dog, down, eight, five, four, go, happy, house, left, marvin, nine, no, off, on, one, right, seven, sheila, six, stop, three, tree, two, up, wow, yes, zero
 
-The following shows the DevKit has recognized the spoken keyword "happy", shown in yellow.  
+The following shows the DevKit has recognized the spoken keyword "happy", shown in yellow.
 The screen will also show a prompt for other keywords you can try, shown in blue.
 
 ![seven](images/happy.png)
@@ -135,7 +135,7 @@ In order to read some audio from the microphone the app uses the following Audio
   // Re-config the audio data format
   Audio.format(SAMPLE_RATE, SAMPLE_BIT_DEPTH);
   delay(100);
-  
+
   Serial.println("listening...");
 
   // Start to record audio data
@@ -145,42 +145,42 @@ The audio callback does not do the model processing, it only stores the raw audi
 ```cpp
 void audio_callback()
 {
-  // this is called when Audio class has a buffer full of audio, 
-  // the buffer is size AUDIO_CHUNK_SIZE (512)  
+  // this is called when Audio class has a buffer full of audio,
+  // the buffer is size AUDIO_CHUNK_SIZE (512)
   Audio.readFromRecordBuffer(raw_audio_buffer, AUDIO_CHUNK_SIZE);
   raw_audio_count++;
-  
+
   char* curReader = &raw_audio_buffer[0];
   char* endReader = &raw_audio_buffer[AUDIO_CHUNK_SIZE];
   while(curReader < endReader)
   {
     if (SAMPLE_BIT_DEPTH == 16)
     {
-      // We are getting 512 samples, but with dual channel 16 bit audio this means we are 
+      // We are getting 512 samples, but with dual channel 16 bit audio this means we are
       // getting 512/4=128 readings after converting to mono channel floating point values.
       // Our featurizer expects 512 readings, so it will take 4 callbacks to fill the featurizer
       // input buffer.
       int bytesPerSample = 2;
-      
+
       // convert to mono
       int16_t sample = *((int16_t *)curReader);
-      curReader += bytesPerSample * 2; // skip right channel 
+      curReader += bytesPerSample * 2; // skip right channel
 
       scaled_input_buffer[scaled_input_buffer_pos] = (float)sample / 32768.0f;
       scaled_input_buffer_pos++;
-      
+
       if (scaled_input_buffer_pos == FEATURIZER_INPUT_SIZE)
       {
         scaled_input_buffer_pos = 0;
         if (next(featurizer_input_buffer_write) == featurizer_input_buffer_read)
         {
-          // dropping frame on the floor since classifier is still processing 
+          // dropping frame on the floor since classifier is still processing
           // this buffer, so record this fact so main loop can print a message.
-          dropped_frames++; 
+          dropped_frames++;
         }
-        else 
+        else
         {
-          memcpy(featurizer_input_buffers[featurizer_input_buffer_write], scaled_input_buffer, FEATURIZER_INPUT_SIZE * sizeof(float));                  
+          memcpy(featurizer_input_buffers[featurizer_input_buffer_write], scaled_input_buffer, FEATURIZER_INPUT_SIZE * sizeof(float));
           featurizer_input_buffer_write = next(featurizer_input_buffer_write);
         }
       }
@@ -203,20 +203,20 @@ bool get_prediction(float* featurizer_input_buffer)
   // classifier
   model_Predict(nullptr, featurizer_output_buffer, classifier_output_buffer);
 
-  // calculate a cheap version of energy level by summing the mfcc output 
+  // calculate a cheap version of energy level by summing the mfcc output
   float level = 0;
   for (int i = 0; i < FEATURIZER_OUTPUT_SIZE; i++)
   {
     float x = featurizer_output_buffer[i];
     level += (x*x);
   }
-  
+
   int vad = vad_signal;
   show_signals(vad, level);
 
   float max = -1;
   int argmax = 0;
-  
+
   // argmax over predictions.
   for (int j = 0; j < CLASSIFIER_OUTPUT_SIZE; j++)
   {
@@ -229,18 +229,18 @@ bool get_prediction(float* featurizer_input_buffer)
 
   timer.stop();
   float elapsed = timer.milliseconds();
-  int percent = (int)(max * 100);  
+  int percent = (int)(max * 100);
   bool got_prediction = false;
-  if (argmax != 0 && max > THRESHOLD) 
-  { 
+  if (argmax != 0 && max > THRESHOLD)
+  {
     if (last_prediction != argmax)
     {
       last_confidence = 0;
     }
     if (last_prediction != argmax || percent > last_confidence) {
-      
+
       if (percent > last_confidence)
-      {        
+      {
         if (last_prediction != argmax && vad && argmax < max_category) {
           Serial.printf("Prediction %d is %s (%.2f) on level %.2f, vad=%d, in %d ms\r\n", prediction_count++, categories[argmax], (float)percent/100, level, vad, (int)elapsed);
           Screen.clean();
@@ -248,24 +248,24 @@ bool get_prediction(float* featurizer_input_buffer)
           if (argmax == hint_index)
           {
             hint_index++;
-            if (hint_index == max_category) 
+            if (hint_index == max_category)
             {
               hint_index = 1;
-            } 
+            }
           }
           Screen.print(2, "next word:");
           Screen.print(3, categories[hint_index]);
           got_prediction = true;
         }
-        
+
         last_prediction = argmax;
         last_confidence = percent;
       }
     }
     if (last_confidence > 0)
     {
-      // to smooth the predictions a bit, it doesn't make sense to get two 
-      // different predictions 30ms apart, so this little count down on the 
+      // to smooth the predictions a bit, it doesn't make sense to get two
+      // different predictions 30ms apart, so this little count down on the
       // previous confidence level provides this smoothing effect.
       last_confidence -= 1;
     }
@@ -280,7 +280,10 @@ Note: the Arduino runtime is expensive.  If you port this app to run using [mbed
 
 ## Try other models
 
-The model used in the above sample app was training using the tutorial [Training audio keyword spotter with pytorch](https://microsoft.github.io/ELL/tutorials/Training-audio-keyword-spotter-with-pytorch/).  You can also use one of the pre-trained models already published to the [Speech Commands Model Gallery](https://microsoft.github.io/ELL/gallery/speech_commands_v0.01/).  The featurizer.S and classifier.S were compiled from the [GRU 100 RunnerBean](https://github.com/Microsoft/ELL-models/tree/master/models/speech_commands_v0.01/RunnerBean) model.
+The model used in the above sample app was training using the tutorial [Training audio keyword spotter with pytorch](https://microsoft.github.io/ELL/tutorials/Training-audio-keyword-spotter-with-pytorch/).  You can also use one of the pre-trained models already published to the [Speech Commands Model Gallery](https://microsoft.github.io/ELL/gallery/speech_commands_v0.01/).  The featurizer.S and classifier.S were compiled from the [GRU 110 Roselle](https://github.com/Microsoft/ELL-models/tree/master/models/speech_commands_v0.01/Roselle) model.
+
+**Note:** because these models were only trained on the [speech commands dataset](http://download.tensorflow.org/data/speech_commands_v0.01.tar.gz) and nothing else, they cannot deal with words outside the list of 30 keywords.  So you may see a lot of false positives if you record gibberish.
+Eliminating false positives requires training on a much larger dataset.
 
 ## Compiling a model for MXCHIP
 
@@ -316,5 +319,3 @@ The Arduino build system will automatically include the .S source code and compi
 #include "classifier.h"
 ```
 The #defines turn off the C++ ModelWrapper because those use STL functions that may not be easy to compile for MXCHIP boards.
-
-
